@@ -4,16 +4,19 @@ export const Navbar = () => {
 
 	return (
 		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
+			<div className="container text-center">
+				<span className="text-center">logo</span>
 				<div className="ml-auto">
 					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
+						<span className="buttons justify-content:">
+							<button className="btn btn-light">Log In</button>
+							<button className="btn btn-primary">Register</button>
+						</span>
 					</Link>
 				</div>
 			</div>
 		</nav>
 	);
 };
+
+export default Navbar
