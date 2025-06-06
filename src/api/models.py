@@ -78,6 +78,8 @@ class Recipe(db.Model):
     author: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     difficulty_type: Mapped[DifficultyType] = mapped_column(Enum(DifficultyType), nullable=False)
+    portions: Mapped[int] = mapped_column(nullable=False, default=1)
+    total_grams: Mapped[float] = mapped_column(Float, nullable=True)
     prep_time: Mapped[int] = mapped_column(nullable=True) #In minutes(covertion made at the frontend)
     steps: Mapped[str] = mapped_column(Text, nullable=False)
     published: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -91,6 +93,13 @@ class Recipe(db.Model):
     collection: Mapped[list["Collection"]] = relationship(back_populates="recipe")
 
     def serialize(self):
+
+        allergens = set()
+        for recipe_ing in self.ingredients:
+            if recipe_ing.ingredient.allergens:
+                for allergen in recipe_ing.ingredient.allergens.split(","):
+                    allergens.add(allergen.strip())
+
         return {
             "id": self.id,
             "title": self.title,
@@ -99,7 +108,10 @@ class Recipe(db.Model):
             "media": [media.serialize() for media in self.media],
             "published": self.published.isoformat() if self.published else None,
             "dificulty_type": self.difficulty_type.value,
+            "portions": self.portions,
+            "total_grams":self.total_grams,
             "prep_time": self.prep_time,
+            "allergens": list(allergens),
             "ingredients": [recipe_ing.serialize() for recipe_ing in self.ingredients],
             "steps": self.steps,
             "comments": [comment.serialize() for comment in self.comments]
@@ -167,13 +179,17 @@ class Ingredient(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
 
+    #This is to store the allergens of each ingredient
+    allergens: Mapped[str] = mapped_column(Text, nullable=True, default="")
+
     #Relatioship with other tables
     recipes: Mapped[list["RecipeIngredient"]] = relationship(back_populates="ingredient") #cambio recipe_ingredient por recipes para reutilizacion de ingredientes
 
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "allergens": self.allergens.split(",") if self.allergens else []
         } 
     
 class RecipeIngredient(db.Model):
@@ -184,7 +200,13 @@ class RecipeIngredient(db.Model):
 
     #Quantity and unit goes here as it will depend on the recipe
     quantity: Mapped[float] = mapped_column(Float, nullable=False)
-    unit: Mapped[str] = mapped_column(String(50), nullable=False) #opciones en frontend
+    unit: Mapped[str] = mapped_column(String(50), nullable=False) #option in frontend
+
+    #This if for nutricional value storage to avoid so many calls per recipe
+    calories: Mapped[float] = mapped_column(Float, default=0)
+    fat: Mapped[float] = mapped_column(Float, default=0)
+    carbs: Mapped[float] = mapped_column(Float, default=0)
+    protein: Mapped[float] = mapped_column(Float, default=0)
 
     #Relatioship with other tables
     recipe: Mapped["Recipe"] = relationship(back_populates="ingredients")
@@ -196,5 +218,9 @@ class RecipeIngredient(db.Model):
             "ingredient_id": self.ingredient_id,
             "ingredient_name": self.ingredient.name,
             "quantity": self.quantity,
-            "unit": self.unit
+            "unit": self.unit,
+            "calories": self.calories,
+            "fat": self.fat,
+            "carbs": self.carbs,
+            "protein": self.protein
         } 

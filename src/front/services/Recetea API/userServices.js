@@ -112,6 +112,56 @@ userServices.editUser = async (userData) => {
   }
 }
 
+//POST for forgot password link (will give provisional token to the client email)
+userServices.forgotPassword = async (email) => {
+  try {
+    const resp = await fetch(url + "/api/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //email field is required
+      body: JSON.stringify(email),
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) throw Error(data.error || data.message);
+
+    console.log("Forgot Password:", data);
+    return data;
+
+  } catch (error) {
+    console.error("Forgot Password Error:", error.message);
+    return { error: error.message };
+  }
+};
+
+//POST for reset password after receivin token from forgot password method
+userServices.resetPassword = async (token, new_password) => {
+  try {
+    //token will be sent as part on the reset password URL, we will have to extract from it
+    const resp = await fetch(url + "/api/reset-password" + token, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //Field password is required
+      body: JSON.stringify(new_password),
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) throw Error(data.error || data.message);
+
+    console.log("Reset Password:", data);
+    return data;
+  } catch (error) {
+    console.error("Reset Password Error:", error.message);
+    return { error: error.message };
+  }
+};
+
 //Soft DELETE user information, we keep recipes posted by the user
 userServices.deleteUser = async () => {
   try {

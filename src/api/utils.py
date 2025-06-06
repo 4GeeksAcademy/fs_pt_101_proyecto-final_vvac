@@ -20,6 +20,7 @@ def has_no_empty_params(rule):
     arguments = rule.arguments if rule.arguments is not None else ()
     return len(defaults) >= len(arguments)
 
+
 def generate_sitemap(app):
     links = ['/admin/']
     for rule in app.url_map.iter_rules():

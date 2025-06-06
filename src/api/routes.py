@@ -2,13 +2,17 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Recipe, Ingredient, Comment, Media, UserStatus, Collection, RecipeIngredient, DifficultyType, MediaType
+from api.models import db, User, Recipe, Ingredient, Comment, Media, UserStatus, Collection, RecipeIngredient, DifficultyType, MediaType, RecipeScore
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select, delete, func
 from datetime import datetime, timezone
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from api.email_utils import send_email, get_serializer
+from api.recipe_utils import convert_to_grams, get_ingredient_info, calculate_calories, calculate_carbs, calculate_fat, calculate_protein
+
+
 
 api = Blueprint('api', __name__)
 
@@ -172,6 +176,84 @@ def update_user():
     db.session.commit()
     return jsonify(user.serialize()), 200
 
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    
+    try:
+        email = request.json.get('email')
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+
+        user = db.session.query(User).filter_by(email=email).first()
+
+        # Evitar revelar si el correo existe
+        if not user or user.status != UserStatus.active:
+            return jsonify({"message": "If that email exists, a reset link was sent."}), 200
+
+        # Create token for limited time
+        serializer = get_serializer()
+        token = serializer.dumps(user.email, salt='password-reset')
+
+        # Generates link to reset password
+        reset_url = url_for('api.reset_password', token=token, _external=True)
+
+        # Personalize email
+        app_name = "Recetea"  # Customize this
+        subject = f"{app_name} - Password Reset Request"
+        body = f"""
+            Hi {user.username},
+
+            We received a request to reset your password for your {app_name} account.
+
+            If you made this request, please reset your password by clicking the link below:
+
+            {reset_url}
+
+            This link will expire in 1 hour. If you didn’t request a password reset, you can ignore this email.
+
+            Best,
+            The {app_name} Team
+            """
+
+        #Sends email with reset link to user
+        send_email(
+            to=user.email,
+            subject=subject,
+            body=body
+        )
+
+        return jsonify({"message": f"If that email exists, a reset link was sent."}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+    
+@api.route('/reset-password/<token>', methods=['POST'])
+def reset_password(token):
+    try:
+        serializer = get_serializer()
+
+        email = serializer.loads(token, salt='password-reset', max_age=3600)
+        data = request.json
+        new_password = data["password"]
+
+        if not new_password:
+            return jsonify({"error": "Add your new password"}), 400
+
+        user = db.session.query(User).filter_by(email=email).first()
+
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        user.password = generate_password_hash(new_password)
+        user.updated_at = datetime.now(timezone.utc)
+        db.session.commit()
+
+        return jsonify({"message": "Password updated successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 #End of user endpoints
 
 #From here all recipe related endpoints
@@ -247,6 +329,9 @@ def create_recipe():
         if not data["difficulty_type"]:
             return jsonify({"error": "Please add a difficulty level to your recipe"}), 400
         
+        if not data["portions"] or data["portions"] < 1:
+            return jsonify({"error": "Please set a valid number of portions"}), 400
+        
         if not data["steps"]:
             return jsonify({"error": "Please add all the steps and instructions needed to your recipe"}), 400
 
@@ -254,16 +339,14 @@ def create_recipe():
             return jsonify({"error": "Please add all the igredients details to your recipe"}), 400
 
         #Conditions to turn the string value into the enum value in our database
-        if data["difficulty_type"] == "Easy":
-            setLevel = DifficultyType.EASY
+        difficulty_map = {
+            "Easy": DifficultyType.EASY,
+            "Moderate": DifficultyType.MODERATE,
+            "Hard": DifficultyType.HARD
+        }
 
-        elif data["difficulty_type"] == "Moderate":
-            setLevel = DifficultyType.MODERATE
-            
-        elif data["difficulty_type"] == "Hard":
-            setLevel = DifficultyType.HARD
-
-        else:
+        setLevel = difficulty_map.get(data["difficulty_type"])
+        if setLevel is None:
             return jsonify({"error": "Please choose from one of these options for difficulty level: Easy, Moderate or Hard."}), 400
         
         #We add on frontend the control of blank space and lower cases
@@ -272,34 +355,65 @@ def create_recipe():
             author=user_id,
             difficulty_type=setLevel,
             steps=data["steps"],
+            portions=data["portions"],
             published=datetime.now(timezone.utc)
         )
         db.session.add(new_recipe)
         db.session.flush()
-    
-        #Add ingredients to the recipe
+
+        total_grams = 0
+
         for ing in data["ingredient"]:
-                name = ing["name"]
-                quantity = ing["quantity"]
-                unit = ing["unit"]
+            name = ing["name"]
+            quantity = ing["quantity"]
+            unit = ing["unit"]
 
-        stmt = select(Ingredient).where(Ingredient.name == name)
-        ingredient = db.session.execute(stmt).scalar_one_or_none()
+            normalized_name = name.lower().strip()
+            info = get_ingredient_info(normalized_name)
 
-        #We add ingredient to database if it does not exist
-        if ingredient is None:
-            ingredient = Ingredient(name=name)
-            db.session.add(ingredient)
-            db.session.flush()
+            if not info or not isinstance(info, dict):
+                return jsonify({"error": f"Failed to fetch ingredient info for '{name}'"}), 400
 
-        recipe_ing = RecipeIngredient(
+            allergens_list = info.get("allergens", [])
+            if not isinstance(allergens_list, list):
+                allergens_list = []
+            allergens_str = ",".join(a.strip() for a in allergens_list if isinstance(a, str) and a.strip())
+
+            ingredient = db.session.query(Ingredient).filter(Ingredient.name == normalized_name).one_or_none()
+
+            if not ingredient:
+                ingredient = Ingredient(
+                    name=name,
+                    allergens=allergens_str
+                )
+                db.session.add(ingredient)
+                db.session.flush()
+
+            if allergens_str and ingredient.allergens != allergens_str:
+                ingredient.allergens = allergens_str
+
+            calories = info["calories"] if info else None
+            fat = info["fat"] if info else None
+            carbs = info["carbs"] if info else None
+            protein = info["protein"] if info else None
+
+            grams = convert_to_grams(name, unit, quantity)
+            total_grams += grams
+
+            recipe_ing = RecipeIngredient(
                 recipe_id=new_recipe.id,
                 ingredient_id=ingredient.id,
                 quantity=quantity,
-                unit=unit
+                unit=unit,
+                calories=calories,
+                fat=fat,
+                carbs=carbs,
+                protein=protein
             )
-            
-        db.session.flush(recipe_ing)
+            new_recipe.ingredients.append(recipe_ing)
+            db.session.add(recipe_ing)
+
+        new_recipe.total_grams = total_grams
 
         # Check for media if they added image to the recipe
         media_data = data["media"]
@@ -361,6 +475,7 @@ def edit_recipe(recipe_id):
         recipe.title = data["title"]
         recipe.author = user_id
         recipe.difficulty_type = setLevel
+        recipe.portions = data["portions"]
         recipe.steps = data["steps"]
         recipe.published = datetime.now(timezone.utc)
         db.session.flush()
@@ -369,6 +484,8 @@ def edit_recipe(recipe_id):
         delete_stmt = delete(RecipeIngredient).where(RecipeIngredient.recipe_id == recipe_id)
         db.session.execute(delete_stmt)
         db.session.flush()
+
+        total_grams = 0
     
         #Add ingredients to the recipe
         for ing in data["ingredient"]:
@@ -380,19 +497,35 @@ def edit_recipe(recipe_id):
         ingredient = db.session.execute(stmt).scalar_one_or_none()
 
         #We add ingredient to database if it does not exist
-        if ingredient is None:
-            ingredient = Ingredient(name=name)
-            db.session.add(ingredient)
+        info = get_ingredient_info(name)
+        calories = info["calories"] if info else 0
+        fat = info["fat"] if info else 0
+        carbs = info["carbs"] if info else 0
+        protein = info["protein"] if info else 0
+        allergens = ",".join(info["allergens"]) if info else ""
+
+        if not ingredient.allergens:
+            ingredient.allergens = allergens
             db.session.flush()
+
+        grams = convert_to_grams(name, unit, quantity)
+        total_grams += grams
 
         recipe_ing = RecipeIngredient(
             recipe_id=recipe.id,
             ingredient_id=ingredient.id,
             quantity=quantity,
-            unit=unit
+            unit=unit,
+            calories=calories,
+            fat=fat,
+            carbs=carbs,
+            protein=protein,
+            allergens=allergens
         )
-            
-        db.session.flush(recipe_ing)
+        
+        db.session.add(recipe_ing)
+
+        recipe.total_grams = total_grams
 
         # Check for media if they added or deleted image on the recipe
         media_data = data["media"]
@@ -404,7 +537,13 @@ def edit_recipe(recipe_id):
                 type_media=MediaType.IMAGE,
                 url=PLACEHOLDER_IMAGE_URL
             )
-        db.session.add(placeholder_media)
+        
+        else:
+            # If media exists, save it (assumes media is a dict or list of dicts)
+            if isinstance(media_data, dict):
+                media_data = [media_data]
+
+        
         db.session.commit()
 
         return jsonify({"success": True}), 201
@@ -424,6 +563,10 @@ def delete_one_recipe(recipe_id):
 
     if recipe is None:
         return jsonify({"error": "Recipe not found"}), 404
+    
+    #Delte media from recipe
+    delete_recipe_media = delete(Media).where(Media.recipe_id == recipe_id)
+    db.session.execute(delete_recipe_media)
 
     #Delete recipe from asociation table
     delete_recipe_ingredients = delete(RecipeIngredient).where(RecipeIngredient.recipe_id == recipe_id)
@@ -486,8 +629,24 @@ def add_media(recipe_id):
             return jsonify({"error": "Missing data. Failed to upload media."}), 400
         
         #Convert the type_medi to match the enum in MediaTupe database
-        if data["type_media"] == "image" or data["type_media"] == "Image":
+        if data["type_media"].lower() == "image":
             media_type = MediaType.IMAGE
+
+        else:
+            return jsonify({"error": "Invalid media type"}), 400
+        
+        placeholder_url = PLACEHOLDER_IMAGE_URL  # Replace with actual placeholder URL
+
+        existing_placeholder = db.session.execute(
+            select(Media).where(
+                Media.recipe_id == recipe_id,
+                Media.type_media == MediaType.IMAGE,
+                Media.url == placeholder_url
+            )
+        ).scalar_one_or_none()
+
+        if existing_placeholder:
+            db.session.delete(existing_placeholder)
         
         new_media = Media(
             recipe_id=recipe_id,
@@ -699,7 +858,6 @@ def get_ingredient(ingredient_id):
     
     return jsonify(ingredient.serialize()), 200
 
-
 # POST new ingredient
 @api.route('/user/ingredients', methods=['POST'])
 @jwt_required()
@@ -844,7 +1002,6 @@ def get_all_collections():
 
     return jsonify([c.serialize() for c in collections]), 200
 
-
 # GET collection of recipe of a specific user
 @api.route('/user/collection', methods=['GET'])
 @jwt_required()
@@ -912,4 +1069,55 @@ def delete_from_collection(recipe_id):
 
     return jsonify({"message": "Recipe removed from collection"}), 200
 
+# ========================================
+# RecipeScore Endpoints
+# ========================================
 
+# GET all saved scores(for test)
+@api.route('/user/score', methods=['GET'])
+def get_all_scores():
+
+    stmt = select(RecipeScore)
+    scores = db.session.execute(stmt).scalars().all()
+
+    return jsonify([c.serialize() for c in scores]), 200
+
+##We do not need to set for recipe as it's serrialized so it will be shown on recipe endpoint
+
+# POST score on recipe
+@api.route('/user/recipes/<int:recipe_id>/score', methods=['POST'])
+@jwt_required()
+def add_score(recipe_id):
+
+    user_id = get_jwt_identity()
+
+    try:
+
+        stmt = select(RecipeScore).where(
+            RecipeScore.user_id == user_id,
+            RecipeScore.recipe_id == recipe_id
+        )
+        liked = db.session.execute(stmt).scalar_one_or_none()
+
+        #Check if recipe is already on the list. If liked it will delete the like (decrease -1)
+        if liked:
+            db.session.delete(liked)
+            db.session.commit()
+            return jsonify({"message": "Like removed", "liked": False}), 200
+        
+        #Add it and sum +1 if not liked
+        else:
+            new_like = RecipeScore(
+                user_id=user_id,
+                recipe_id=recipe_id,
+                score=1 
+            )
+
+            db.session.add(new_like)
+            db.session.commit()
+            return jsonify({"message": "Like added", "liked": True}), 201
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+##No need for delete as on POST we already delete the like if it exists
