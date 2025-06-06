@@ -1,39 +1,36 @@
-import { useState } from "react";
+import userServices from "../services/Recetea API/userServices";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 
-const LogIn = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+ export const LogIn = () => {
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value});
+    };
 
     const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-        const response = await fetch("https://TU_BACKEND/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            localStorage.setItem("token", data.token);  // o sessionStorage
-            navigate("/dashboard"); // Redirige tras login
-        } else {
-            alert(data.message || "Error al iniciar sesión");
-        }
+      const response = await userServices.login(formData);
+      if (response.token) {
+        // Login exitoso
+        console.log("User identified:", response);
+        // Puedes redirigir o mostrar una alerta
+        
+      } else {
+        alert("non valid password or email");
+      }
     } catch (error) {
-        console.error("Error de red:", error);
-        alert("Error de red al intentar iniciar sesión");
+      console.error("log in error:", error);
+      alert("Log in failed.");
     }
-};
-
+  };
     return (
         <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
             <div className="container">
@@ -48,8 +45,9 @@ const LogIn = () => {
                                     </label>
                                     <input
                                         type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        name="Email"
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
@@ -59,8 +57,9 @@ const LogIn = () => {
                                     </label>
                                     <input
                                         type="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </div>
@@ -76,4 +75,3 @@ const LogIn = () => {
     );
 };
 
-export default LogIn
