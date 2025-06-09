@@ -41,7 +41,6 @@ export const Home = () => {
 	}, [])
 
 	return (
-		<div className="text-center mt-5">
 			
 		<div className="container-fluid">
 			<div className="row">
@@ -63,4 +62,4 @@ export const Home = () => {
 		</div>
 
 	);
-}; 
+};

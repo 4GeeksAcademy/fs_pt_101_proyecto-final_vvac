@@ -28,10 +28,6 @@ export const router = createBrowserRouter(
         {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
 
         <Route path= "/" element={<Home />} />
-
-
-        <Route path= "/" element={<Home />} />
-
         <Route path= "/LogIn" element={<LogIn />} />
         <Route path= "/Register" element={<Register />} />
         <Route path="/recipes/:id" element={<RecipeDetails />} />
