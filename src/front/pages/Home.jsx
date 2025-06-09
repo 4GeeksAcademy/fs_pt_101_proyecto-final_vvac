@@ -43,6 +43,24 @@ export const Home = () => {
 	return (
 		<div className="text-center mt-5">
 			
+		<div className="container-fluid">
+			<div className="row">
+				<h3>This is for test as we have pending the Home page</h3>
+				<div className="scroll-container d-flex p-3">
+
+					{/* maping over RecipeCards to create cards based on the data */}
+					{
+						store.recipes?.map((el) => <RecipeCard
+							key={el.id}
+							recipe_id={el.id}
+							title={el.title}
+							url={el.media?.[0]?.url}
+
+						/>)
+					}
+				</div>
+			</div>
 		</div>
+
 	);
 }; 
