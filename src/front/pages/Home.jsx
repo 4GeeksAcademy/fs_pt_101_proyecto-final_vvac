@@ -41,20 +41,24 @@ export const Home = () => {
 	}, [])
 
 	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
+		<div className="container-fluid">
+			<div className="row">
+				<h3>This is for test as we have pending the Home page</h3>
+				<div className="scroll-container d-flex p-3">
+
+					{/* maping over RecipeCards to create cards based on the data */}
+					{
+						store.recipes?.map((el) => <RecipeCard
+							key={el.id}
+							recipe_id={el.id}
+							title={el.title}
+							url={el.media?.[0]?.url}
+
+						/>)
+					}
+				</div>
 			</div>
 		</div>
+
 	);
 }; 

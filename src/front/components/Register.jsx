@@ -1,4 +1,4 @@
-import userServices from "../services/Recetea API/userServices";
+import userServices from "../services/recetea_API/userServices";
 import { useState } from "react";
 
  export const Register = () => { //definimos parametros
