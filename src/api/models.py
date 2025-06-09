@@ -27,6 +27,8 @@ class User(db.Model):
     comments: Mapped[list["Comment"]] = relationship(back_populates="user")
     collection: Mapped[list["Collection"]] = relationship(back_populates="user")
     recipes: Mapped[list["Recipe"]] = relationship(back_populates="user")
+    shopping_list: Mapped[list["ShoppingListItem"]] = relationship(back_populates="user")
+
 
     def serialize(self):
         return {
@@ -228,9 +230,31 @@ class RecipeIngredient(db.Model):
             "fat": self.fat,
             "saturated_fat": self.saturated_fat,
             "carbs": self.carbs,
-            "sugars": self.sugars,
-            "fiber": self.fiber,
             "protein": self.protein,
             "salt": self.salt,
             "sodium": self.sodium
         } 
+
+class ShoppingListItem(db.Model):
+    __tablename__ = 'shopping_list_items'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+
+    ingredient_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    total_quantity: Mapped[float] = mapped_column(Float, nullable=False)
+    unit: Mapped[str] = mapped_column(String(50), nullable=False)
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    user: Mapped["User"] = relationship(back_populates="shopping_list")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "ingredient_name": self.ingredient_name,
+            "total_quantity": self.total_quantity,
+            "unit": self.unit,
+            "created_at": self.created_at.isoformat() if self.created_at else None
+        }

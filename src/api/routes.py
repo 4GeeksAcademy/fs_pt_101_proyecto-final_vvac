@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Recipe, Ingredient, Comment, Media, UserStatus, Collection, RecipeIngredient, DifficultyType, MediaType, RecipeScore
+from api.models import db, User, Recipe, Ingredient, Comment, Media, UserStatus, Collection, RecipeIngredient, DifficultyType, MediaType, RecipeScore, ShoppingListItem
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from sqlalchemy import select, delete, func
@@ -1189,3 +1189,62 @@ def add_score(recipe_id):
         return jsonify({"error": str(e)}), 500
     
 ##No need for delete as on POST we already delete the like if it exists
+
+# ====================================
+# Shopping List Endpoints
+# ====================================
+
+# GET list from authenticated user
+@api.route('/user/shopping-list', methods=['GET'])
+@jwt_required()
+def get_shopping_list():
+    user_id = get_jwt_identity()
+
+    items = db.session.query(ShoppingListItem).filter_by(user_id=user_id).all()
+    return jsonify([item.serialize() for item in items]), 200
+
+
+# POST: add recipes to shopping list
+@api.route('/user/shopping-list', methods=['POST'])
+@jwt_required()
+def add_to_shopping_list():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    recipe_ids = data.get("recipe_ids", [])
+
+    if not recipe_ids:
+        return jsonify({"error": "Please provide at least one recipe ID"}), 400
+
+    try:
+        updated_list = add_recipes_to_shopping_list(recipe_ids, user_id)
+        return jsonify(updated_list), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# DELETE ingredient from the list by ID
+@api.route('/user/shopping-list/<int:item_id>', methods=['DELETE'])
+@jwt_required()
+def delete_shopping_item(item_id):
+    user_id = get_jwt_identity()
+
+    stmt = select(ShoppingListItem).where(ShoppingListItem.id == item_id, ShoppingListItem.user_id == user_id)
+    item = db.session.execute(stmt).scalar_one_or_none()
+
+    if not item:
+        return jsonify({"error": "Item not found or not owned by user"}), 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"message": "Item deleted"}), 200
+
+
+# DELETE all list from user
+@api.route('/user/shopping-list', methods=['DELETE'])
+@jwt_required()
+def clear_shopping_list():
+    user_id = get_jwt_identity()
+
+    deleted = db.session.query(ShoppingListItem).filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return jsonify({"message": f"{deleted} items deleted from shopping list"}), 200
