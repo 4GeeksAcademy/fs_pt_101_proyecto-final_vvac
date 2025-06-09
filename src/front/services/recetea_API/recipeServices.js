@@ -1,4 +1,4 @@
-// This will set the url to the same we added to the env file
+ // This will set the url to the same we added to the env file
 const url = import.meta.env.VITE_BACKEND_URL;
 
 const recipeServices = {};
