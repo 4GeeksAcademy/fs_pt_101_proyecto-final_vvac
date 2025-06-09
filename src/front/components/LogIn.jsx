@@ -40,12 +40,12 @@ import { useState } from "react";
                             <h3>Let's cook Chef!</h3>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">
+                                    <label for="exampleInputEmail1" class="form-label">
                                         Email address
                                     </label>
                                     <input
                                         type="email"
-                                        name="Email"
+                                        name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         required

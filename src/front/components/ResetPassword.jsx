@@ -1,4 +1,4 @@
-const ResetPassword = () => {
+ export const ResetPassword = () => {
     return (
         <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
             <div className="container">
@@ -56,4 +56,3 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword
