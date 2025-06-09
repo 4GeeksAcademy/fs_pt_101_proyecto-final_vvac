@@ -2,6 +2,8 @@ from app import app
 from api.models import db
 
 #Steps to properly wipe database from all data - Paste this on terminal:
+###Only use this if there are issues to use the command pipenv run python src/reset_db.py
+
 ##Step1:
 # psql -U gitpod -h localhost postgres
 ##Step2:

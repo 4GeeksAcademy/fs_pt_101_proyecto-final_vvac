@@ -156,6 +156,7 @@ userServices.resetPassword = async (token, new_password) => {
 
     console.log("Reset Password:", data);
     return data;
+    
   } catch (error) {
     console.error("Reset Password Error:", error.message);
     return { error: error.message };

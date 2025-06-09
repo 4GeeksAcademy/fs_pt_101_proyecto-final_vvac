@@ -107,7 +107,7 @@ class Recipe(db.Model):
             "username": self.user.username,
             "media": [media.serialize() for media in self.media],
             "published": self.published.isoformat() if self.published else None,
-            "dificulty_type": self.difficulty_type.value,
+            "difficulty_type": self.difficulty_type.value,
             "portions": self.portions,
             "total_grams":self.total_grams,
             "prep_time": self.prep_time,
@@ -205,8 +205,13 @@ class RecipeIngredient(db.Model):
     #This if for nutricional value storage to avoid so many calls per recipe
     calories: Mapped[float] = mapped_column(Float, default=0)
     fat: Mapped[float] = mapped_column(Float, default=0)
+    saturated_fat: Mapped[float] = mapped_column(Float, default=0)
     carbs: Mapped[float] = mapped_column(Float, default=0)
+    sugars: Mapped[float] = mapped_column(Float, default=0)
+    fiber: Mapped[float] = mapped_column(Float, default=0)
     protein: Mapped[float] = mapped_column(Float, default=0)
+    salt: Mapped[float] = mapped_column(Float, default=0)
+    sodium: Mapped[float] = mapped_column(Float, default=0) 
 
     #Relatioship with other tables
     recipe: Mapped["Recipe"] = relationship(back_populates="ingredients")
@@ -221,6 +226,11 @@ class RecipeIngredient(db.Model):
             "unit": self.unit,
             "calories": self.calories,
             "fat": self.fat,
+            "saturated_fat": self.saturated_fat,
             "carbs": self.carbs,
-            "protein": self.protein
+            "sugars": self.sugars,
+            "fiber": self.fiber,
+            "protein": self.protein,
+            "salt": self.salt,
+            "sodium": self.sodium
         } 

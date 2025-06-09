@@ -44,18 +44,44 @@ FALLBACK_UNIT_CONVERSIONS = {
 }
 
 COMMON_INGREDIENT_ALLERGENS = {
-    "flour": ["gluten"],
-    "milk": ["milk", "lactose"],
+    "spaghetti": ["wheat", "gluten"],
+    "pasta": ["wheat", "gluten"],
+    "bread": ["wheat", "gluten"],
+    "flour": ["wheat", "gluten"],
+    "milk": ["milk"],
+    "cheese": ["milk", "lactose"],
     "butter": ["milk", "lactose"],
-    "eggs": ["egg"],
     "yogurt": ["milk", "lactose"],
-    "cheese": ["milk"],
-    "bread": ["gluten"],
+    "egg": ["eggs"],
+    "mayonnaise": ["eggs"],
+    "shrimp": ["shellfish"],
+    "crab": ["shellfish"],
+    "lobster": ["shellfish"],
+    "salmon": ["fish"],
+    "tuna": ["fish"],
+    "cod": ["fish"],
     "peanuts": ["peanuts"],
-    "almonds": ["tree-nuts"],
-    "shrimp": ["crustaceans"],
-    "soy": ["soybeans"],
-    "wheat": ["gluten", "wheat"]
+    "peanut butter": ["peanuts"],
+    "almonds": ["tree nuts"],
+    "cashews": ["tree nuts"],
+    "walnuts": ["tree nuts"],
+    "hazelnuts": ["tree nuts"],
+    "soy": ["soy"],
+    "soy sauce": ["soy"],
+    "tofu": ["soy"],
+    "sesame": ["sesame"],
+    "tahini": ["sesame"],
+    "mustard": ["mustard"],
+    "mustard seeds": ["mustard"],
+    "celery": ["celery"],
+    "celery salt": ["celery"],
+    "lupin": ["lupin"],
+    "mussels": ["mollusks"],
+    "oysters": ["mollusks"],
+    "scallops": ["mollusks"],
+    "dried apricots": ["sulfites"],
+    "raisins": ["sulfites"],
+    "wine": ["sulfites"]
 }
 
 def convert_to_grams(ingredient_name: str, unit: str, quantity: float) -> float:
@@ -134,8 +160,13 @@ def get_ingredient_info(name):
         return {
             "calories": selected_nutriments.get("energy-kcal_100g", 0),
             "fat": selected_nutriments.get("fat_100g", 0),
+            "saturated_fat": selected_nutriments.get("saturated-fat_100g", 0),
             "carbs": selected_nutriments.get("carbohydrates_100g", 0),
+            "sugars": selected_nutriments.get("sugars_100g", 0),
+            "fiber": selected_nutriments.get("fiber_100g", 0),
             "protein": selected_nutriments.get("proteins_100g", 0),
+            "salt": selected_nutriments.get("salt_100g", 0),
+            "sodium": selected_nutriments.get("sodium_100g", 0),
             "allergens": combined_allergens or fallback_allergens
         }
     
@@ -144,8 +175,13 @@ def get_ingredient_info(name):
         return {
             "calories": 0,
             "fat": 0,
+            "saturated_fat": 0,
             "carbs": 0,
+            "sugars": 0,
+            "fiber": 0,
             "protein": 0,
+            "salt": 0,
+            "sodium": 0,
             "allergens": fallback_allergens
         }
 

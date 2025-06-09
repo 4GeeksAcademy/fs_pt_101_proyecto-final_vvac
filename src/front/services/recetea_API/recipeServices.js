@@ -9,13 +9,48 @@ const authHeaders = () => ({
   'Content-Type': 'application/json'
 });
 
+// Get all recipes (guests)
+recipeServices.getAllRecipes = async () => {
+    try {
+        const resp = await fetch(url + "/api/recipes", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || data.message);
+        return data;
+    } catch (error) {
+        console.error("Error fetching all recipes:", error);
+        return error;
+    }
+};
+
+// Get a specific recipe by ID (guests)
+recipeServices.getOneRecipe = async (id) => {
+    try {
+        const resp = await fetch(url + "/api/recipes/" + id, {
+            method: 'GET',
+        });
+
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || data.message);
+
+        return data;
+
+    } catch (error) {
+        console.error("Error fetching recipe:" + id, error);
+        return error;
+    }
+};
 
 //For mis recetas option
 //Get all recipes (need to log in)
 recipeServices.getAllUserRecipes = async () => {
     try {
-        const resp = await fetch(url + "/user/recipes", {
+        const resp = await fetch(url + "/api/user/recipes", {
         method: 'GET',
         headers: authHeaders()
         });
@@ -30,9 +65,9 @@ recipeServices.getAllUserRecipes = async () => {
 }
 
 // GET a specific recipe (need to log in)
-recipeServices.getOneUserRecipe = async (recipe_id) => {
+recipeServices.getOneUserRecipe = async (id) => {
     try {
-        const resp = await fetch(url + "/user/recipes/" + recipe_id, {
+        const resp = await fetch(url + "/api/user/recipes/" + id, {
         method: 'GET',
         headers: authHeaders()
         });
@@ -49,7 +84,7 @@ recipeServices.getOneUserRecipe = async (recipe_id) => {
 // POST a new recipe (need to log in)
 recipeServices.createRecipe = async (recipeData) => {
     try {
-        const resp = await fetch(url + "/user/recipes", {
+        const resp = await fetch(url + "/api/user/recipes", {
         method: 'POST',
         headers: authHeaders(),
         //Need to have title, difficulty_type, steps and ingredients. Prep_time is optional.
@@ -68,9 +103,9 @@ recipeServices.createRecipe = async (recipeData) => {
 }
 
 // PUT to edit an existing recipe (need to log in and be the author of the recipe)
-recipeServices.editRecipe = async (recipe_id, recipeData) => {
+recipeServices.editRecipe = async (id, recipeData) => {
     try {
-        const resp = await fetch(url + "user/recipes/" + recipe_id, {
+        const resp = await fetch(url + "/api/user/recipes/" + id, {
         method: 'PUT',
         headers: authHeaders(),
         //Same as the post body.
@@ -87,9 +122,9 @@ recipeServices.editRecipe = async (recipe_id, recipeData) => {
 }
 
   // DELETE a recipe created by the user (need to log in and be the author of the recipe)
-recipeServices.deleteRecipe = async (recipe_id) => {
+recipeServices.deleteRecipe = async (id) => {
     try {
-      const resp = await fetch(url + "/user/recipes/" + recipe_id, {
+      const resp = await fetch(url + "/api/user/recipes/" + id, {
         method: 'DELETE',
         headers: authHeaders()
       });

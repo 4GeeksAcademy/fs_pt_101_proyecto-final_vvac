@@ -11,7 +11,7 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.email_utils import send_email, get_serializer
 from api.recipe_utils import convert_to_grams, get_ingredient_info, calculate_calories, calculate_carbs, calculate_fat, calculate_protein
-
+import json
 
 
 api = Blueprint('api', __name__)
@@ -349,12 +349,29 @@ def create_recipe():
         if setLevel is None:
             return jsonify({"error": "Please choose from one of these options for difficulty level: Easy, Moderate or Hard."}), 400
         
+        #Convert the steps into JSON to avoid issues on Frontend
+        steps_data = data["steps"]
+
+        if isinstance(steps_data, str):
+            try:
+                steps_list = json.loads(steps_data)
+            except Exception:
+                # fallback: treat it as single string step in a list
+                steps_list = [steps_data]
+        elif isinstance(steps_data, list):
+            steps_list = steps_data
+        else:
+            return jsonify({"error": "Invalid steps format"}), 400
+
+        steps_json = json.dumps(steps_list)
+        
         #We add on frontend the control of blank space and lower cases
         new_recipe = Recipe(
             title=data["title"],
             author=user_id,
             difficulty_type=setLevel,
-            steps=data["steps"],
+            prep_time=data["prep_time"],
+            steps=steps_json,
             portions=data["portions"],
             published=datetime.now(timezone.utc)
         )
@@ -375,6 +392,7 @@ def create_recipe():
                 return jsonify({"error": f"Failed to fetch ingredient info for '{name}'"}), 400
 
             allergens_list = info.get("allergens", [])
+
             if not isinstance(allergens_list, list):
                 allergens_list = []
             allergens_str = ",".join(a.strip() for a in allergens_list if isinstance(a, str) and a.strip())
@@ -394,8 +412,13 @@ def create_recipe():
 
             calories = info["calories"] if info else None
             fat = info["fat"] if info else None
+            saturated_fat = info["saturated_fat"] if info else None
             carbs = info["carbs"] if info else None
+            sugars = info["sugars"] if info else None
+            fiber = info["fiber"] if info else None
             protein = info["protein"] if info else None
+            salt = info["salt"] if info else None
+            sodium = info["sodium"] if info else None
 
             grams = convert_to_grams(name, unit, quantity)
             total_grams += grams
@@ -407,8 +430,13 @@ def create_recipe():
                 unit=unit,
                 calories=calories,
                 fat=fat,
+                saturated_fat=saturated_fat,
                 carbs=carbs,
-                protein=protein
+                sugars=sugars,
+                fiber=fiber,
+                protein=protein,
+                salt=salt,
+                sodium=sodium
             )
             new_recipe.ingredients.append(recipe_ing)
             db.session.add(recipe_ing)
@@ -471,12 +499,29 @@ def edit_recipe(recipe_id):
         else:
             return jsonify({"error": "Please choose from one of these options for difficulty level: Easy, Moderate or Hard."}), 400
         
+        #Convert the steps into JSON to avoid issues on Frontend
+        steps_data = data["steps"]
+
+        if isinstance(steps_data, str):
+            try:
+                steps_list = json.loads(steps_data)
+            except Exception:
+                # fallback: treat it as single string step in a list
+                steps_list = [steps_data]
+        elif isinstance(steps_data, list):
+            steps_list = steps_data
+        else:
+            return jsonify({"error": "Invalid steps format"}), 400
+
+        steps_json = json.dumps(steps_list)
+
         #We add on frontend the control of blank space and lower cases
         recipe.title = data["title"]
         recipe.author = user_id
         recipe.difficulty_type = setLevel
+        recipe.prep_time=data["prep_time"]
         recipe.portions = data["portions"]
-        recipe.steps = data["steps"]
+        recipe.steps = steps_json
         recipe.published = datetime.now(timezone.utc)
         db.session.flush()
 
@@ -486,64 +531,79 @@ def edit_recipe(recipe_id):
         db.session.flush()
 
         total_grams = 0
-    
-        #Add ingredients to the recipe
+
         for ing in data["ingredient"]:
             name = ing["name"]
             quantity = ing["quantity"]
             unit = ing["unit"]
 
-        stmt = select(Ingredient).where(Ingredient.name == name)
-        ingredient = db.session.execute(stmt).scalar_one_or_none()
+            normalized_name = name.lower().strip()
 
-        #We add ingredient to database if it does not exist
-        info = get_ingredient_info(name)
-        calories = info["calories"] if info else 0
-        fat = info["fat"] if info else 0
-        carbs = info["carbs"] if info else 0
-        protein = info["protein"] if info else 0
-        allergens = ",".join(info["allergens"]) if info else ""
+            stmt = select(Ingredient).where(Ingredient.name == normalized_name)
+            ingredient = db.session.execute(stmt).scalar_one_or_none()
 
-        if not ingredient.allergens:
-            ingredient.allergens = allergens
-            db.session.flush()
+            info = get_ingredient_info(normalized_name)
+            calories = info["calories"] if info else 0
+            fat = info["fat"] if info else 0
+            saturated_fat = info["saturated_fat"] if info else 0
+            carbs = info["carbs"] if info else 0
+            sugars = info["sugars"] if info else 0
+            fiber = info["fiber"] if info else 0
+            protein = info["protein"] if info else 0
+            salt = info["salt"] if info else 0
+            sodium = info["sodium"] if info else 0
+            allergens = ",".join(info["allergens"]) if info and info.get("allergens") else ""
 
-        grams = convert_to_grams(name, unit, quantity)
-        total_grams += grams
+            if not ingredient:
+                ingredient = Ingredient(
+                    name=normalized_name,
+                    allergens=allergens
+                )
+                db.session.add(ingredient)
+                db.session.flush()
 
-        recipe_ing = RecipeIngredient(
-            recipe_id=recipe.id,
-            ingredient_id=ingredient.id,
-            quantity=quantity,
-            unit=unit,
-            calories=calories,
-            fat=fat,
-            carbs=carbs,
-            protein=protein,
-            allergens=allergens
-        )
-        
-        db.session.add(recipe_ing)
+            if allergens and ingredient.allergens != allergens:
+                ingredient.allergens = allergens
+                db.session.flush()
+
+            grams = convert_to_grams(name, unit, quantity)
+            total_grams += grams
+
+            recipe_ing = RecipeIngredient(
+                recipe_id=recipe.id,
+                ingredient_id=ingredient.id,
+                quantity=quantity,
+                unit=unit,
+                calories=calories,
+                fat=fat,
+                saturated_fat=saturated_fat,
+                carbs=carbs,
+                sugars=sugars,
+                fiber=fiber,
+                protein=protein,
+                salt=salt,
+                sodium=sodium,
+            )
+            recipe.ingredients.append(recipe_ing)
+            db.session.add(recipe_ing)
 
         recipe.total_grams = total_grams
 
-        # Check for media if they added or deleted image on the recipe
-        media_data = data["media"]
+        # Media handling
+        media_data = data.get("media")
 
         if not media_data:
-            # If no media, add a placeholder image
             placeholder_media = Media(
                 recipe_id=recipe.id,
                 type_media=MediaType.IMAGE,
                 url=PLACEHOLDER_IMAGE_URL
             )
-        
+            db.session.add(placeholder_media)
         else:
-            # If media exists, save it (assumes media is a dict or list of dicts)
             if isinstance(media_data, dict):
                 media_data = [media_data]
+            # Here you can add your media update logic for multiple media entries if needed
 
-        
         db.session.commit()
 
         return jsonify({"success": True}), 201
@@ -1074,13 +1134,21 @@ def delete_from_collection(recipe_id):
 # ========================================
 
 # GET all saved scores(for test)
-@api.route('/user/score', methods=['GET'])
+@api.route('/scores', methods=['GET'])
 def get_all_scores():
 
     stmt = select(RecipeScore)
     scores = db.session.execute(stmt).scalars().all()
 
     return jsonify([c.serialize() for c in scores]), 200
+
+# GET all saved scores for a recipe
+@api.route('/recipes/<int:recipe_id>/scores', methods=['GET'])
+def get_recipe_scores(recipe_id):
+
+    ingredients = RecipeScore.query.filter_by(recipe_id=recipe_id).all()
+    
+    return jsonify([score.serialize() for score in ingredients]), 200
 
 ##We do not need to set for recipe as it's serrialized so it will be shown on recipe endpoint
 
