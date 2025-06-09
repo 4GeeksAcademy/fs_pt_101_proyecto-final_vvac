@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 //assets
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+
 
 //components
 import { RecipeCard } from "../components/RecipeCard.jsx";
