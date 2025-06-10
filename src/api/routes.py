@@ -546,7 +546,7 @@ def edit_recipe(recipe_id):
             calories = info["calories"] if info else 0
             fat = info["fat"] if info else 0
             saturated_fat = info["saturated_fat"] if info else 0
-            carbs = info["carbs"] if info else 0git pu
+            carbs = info["carbs"] if info else 0
             sugars = info["sugars"] if info else 0
             fiber = info["fiber"] if info else 0
             protein = info["protein"] if info else 0
