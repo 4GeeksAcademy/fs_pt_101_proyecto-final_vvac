@@ -13,6 +13,11 @@ import { LogIn } from "./components/LogIn.jsx";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 import { RecipeDetails } from "./pages/RecipeDetails";
+import { Profile } from "./pages/Profile";
+import { ShoppingList } from "./pages/ShoppingList";
+import { CollectionFav } from "./pages/CollectionFav";
+import { MealPlanner } from "./pages/MealPlanner";
+
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -33,6 +38,11 @@ export const router = createBrowserRouter(
         <Route path="/recipes/:id" element={<RecipeDetails />} />
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/shopping-list" element={<ShoppingList />} />
+        <Route path="/your-collection" element={<CollectionFav />} />
+        <Route path="/meal-planner" element={<MealPlanner />} />
+        
       </Route>
     ),
     {
