@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { LinksMenu } from "../components/LinksMenu"
 import { RightMenu } from "../components/RightMenu"
 import { RecipeCard } from "../components/RecipeCard";
-
+import recipeServices from "../services/recetea_API/recipeServices";
 
 export const CollectionFav = () => {
 
@@ -34,6 +34,28 @@ export const CollectionFav = () => {
             localStorage.setItem("savedRecipes", JSON.stringify(updated));
             return updated;
         });
+    };
+
+// de abajo -- revisar
+    const fetchAllItems = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+        // en back hay un método getAllRecipes()
+        const resp = await recipeServices.getAllRecipes();
+        // resp debería ser un array de objetos receta
+        const formatted = resp.map(r => ({
+        recipe_id: r._id,
+        title: r.title,
+        url: r.media?.[0]?.url || "",
+        }));
+        setAllItems(formatted);
+    } catch (err) {
+        console.error(err);
+        setError("Error cargando todas las recetas! (fetchAllItems)");
+    } finally {
+        setLoading(false);
+    }
     };
 
 
@@ -225,7 +247,7 @@ export const CollectionFav = () => {
                                     {activeTab === "all" && (
 
                                         <div className="tab-pane active">
-                                            {renderAllCards()}
+                                            {pipenb()}
                                         </div>
 
                                     )}
