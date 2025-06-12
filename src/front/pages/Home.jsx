@@ -9,6 +9,8 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 //components
 import { RecipeCard } from "../components/RecipeCard.jsx";
 import { LogIn } from "../components/LogIn.jsx";
+import { Navbar } from "../components/Navbar.jsx";
+import { faAlignJustify } from "@fortawesome/free-solid-svg-icons";
 
 export const Home = () => {
 
@@ -43,7 +45,17 @@ export const Home = () => {
 	return (
 			
 		<div className="container-fluid">
-			<div className="row">
+			
+			<div className="row" >
+				<div className="col-md-4 text-center">
+					a
+				</div>
+				<div className="col-md-4 text-center">
+					a
+				</div>
+				<div className="col-md-4 text-center">
+					a
+				</div>
 				<h3>This is for test as we have pending the Home page</h3>
 				<div className="scroll-container d-flex p-3">
 

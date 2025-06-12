@@ -1,7 +1,7 @@
 import userServices from "../services/recetea_API/userServices";
 import { useState } from "react";
 
- export const Register = () => { //definimos parametros
+export const Register = () => { //definimos parametros
     const [formData, setFormData] = useState({
         UserName: "",
         email: "",
@@ -33,10 +33,13 @@ import { useState } from "react";
                 <div className="row justify-content-center">
                     <div className="col-12 col-sm-8 col-md-6 col-lg-4">
                         <div className="card p-4 shadow">
-                            <h3>Wellcome Chef!</h3>
+
+                            {/* Título centrado y margen inferior */}
+                            <h3 className="text-center mb-4">Wellcome Chef!</h3>
+
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
-                                    <label for="InputUserName" class="form-label">
+                                    <label htmlFor="InputUserName" className="form-label">
                                         Username
                                     </label>
                                     <input
@@ -45,10 +48,13 @@ import { useState } from "react";
                                         value={formData.username}
                                         onChange={handleChange}
                                         required
+                                        className="form-control"
+                                        id="InputUserName"
                                     />
                                 </div>
+
                                 <div className="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">
+                                    <label htmlFor="exampleInputEmail1" className="form-label">
                                         Email address
                                     </label>
                                     <input
@@ -57,13 +63,17 @@ import { useState } from "react";
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
+                                        className="form-control"
+                                        id="exampleInputEmail1"
+                                        aria-describedby="emailHelp"
                                     />
-                                    <div id="emailHelp" class="form-text">
+                                    <div id="emailHelp" className="form-text">
                                         We'll never share your email.
                                     </div>
                                 </div>
+
                                 <div className="mb-3">
-                                    <label for="exampleInputPassword1" class="form-label">
+                                    <label htmlFor="exampleInputPassword1" className="form-label">
                                         Password
                                     </label>
                                     <input
@@ -72,17 +82,24 @@ import { useState } from "react";
                                         value={formData.password}
                                         onChange={handleChange}
                                         required
+                                        className="form-control"
+                                        id="exampleInputPassword1"
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary">
-                                    Register
-                                </button>
+
+                                <div className="d-grid">
+                                    <button type="submit" className="btn btn-primary">
+                                        Register
+                                    </button>
+                                </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     );
 };
 

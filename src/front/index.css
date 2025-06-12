@@ -779,3 +779,13 @@ div.scroll-container {
   background-color: #d48b1f;
 }
 
+.logo-navbar {
+  max-height: 50px;
+  max-width: 140px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  padding: 0;
+  margin: 0;
+}

@@ -1,14 +1,14 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint # type: ignore
 from api.models import db, User, Recipe, Ingredient, Comment, Media, UserStatus, Collection, RecipeIngredient, DifficultyType, MediaType, RecipeScore, ShoppingListItem
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
-from sqlalchemy import select, delete, func
+from flask_cors import CORS # type: ignore
+from sqlalchemy import select, delete, func # type: ignore
 from datetime import datetime, timezone
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required # type: ignore
+from werkzeug.security import generate_password_hash, check_password_hash # type: ignore
 from api.email_utils import send_email, get_serializer
 from api.recipe_utils import convert_to_grams, get_ingredient_info, calculate_calories, calculate_carbs, calculate_fat, calculate_protein
 import json
@@ -546,7 +546,7 @@ def edit_recipe(recipe_id):
             calories = info["calories"] if info else 0
             fat = info["fat"] if info else 0
             saturated_fat = info["saturated_fat"] if info else 0
-            carbs = info["carbs"] if info else 0git pu
+            carbs = info["carbs"] if info else 0
             sugars = info["sugars"] if info else 0
             fiber = info["fiber"] if info else 0
             protein = info["protein"] if info else 0
@@ -1216,7 +1216,7 @@ def add_to_shopping_list():
         return jsonify({"error": "Please provide at least one recipe ID"}), 400
 
     try:
-        updated_list = add_recipes_to_shopping_list(recipe_ids, user_id)
+        updated_list = add_recipes_to_shopping_list(recipe_ids, user_id) # type: ignore
         return jsonify(updated_list), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
