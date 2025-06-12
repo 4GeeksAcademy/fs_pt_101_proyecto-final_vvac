@@ -23,7 +23,7 @@ recipeServices.getAllRecipes = async () => {
         if (!resp.ok) throw new Error(data.error || data.message);
         return data;
     } catch (error) {
-        console.error("Error fetching all recipes!!!:", error);
+        console.error("Error fetching all recipes:", error);
         return error;
     }
 };
@@ -59,7 +59,7 @@ recipeServices.getAllUserRecipes = async () => {
         if (!resp.ok) throw new Error(data.error || data.message);
         return data;
     } catch (error) {
-        console.error("Error fetching user recipes:!!", error);
+        console.error("Error fetching user recipes:", error);
         return error;
     }
 }
