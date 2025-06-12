@@ -47,16 +47,12 @@ export const Home = () => {
 		<div className="container-fluid">
 			
 			<div className="row" >
-				<div className="col-md-4 text-center">
-					a
+				<div className="col-md-12 text-center">
+					<div className="container-home">
+						
+					</div>
 				</div>
-				<div className="col-md-4 text-center">
-					a
-				</div>
-				<div className="col-md-4 text-center">
-					a
-				</div>
-				<h3>This is for test as we have pending the Home page</h3>
+				
 				<div className="scroll-container d-flex p-3">
 
 					{/* maping over RecipeCards to create cards based on the data */}
