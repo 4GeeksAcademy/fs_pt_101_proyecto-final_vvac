@@ -14,6 +14,7 @@ recipeServices.getAllRecipes = async () => {
     try {
         const resp = await fetch(url + "/api/recipes", {
             method: 'GET',
+            // mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             }

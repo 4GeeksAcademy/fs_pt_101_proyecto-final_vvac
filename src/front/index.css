@@ -1,3 +1,4 @@
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -60,7 +61,7 @@ table {
 .recipe_img{
 	object-fit: cover;
 	width: 100%;
-	height: 400px;
+	height: 24rem;
 
 }
 
@@ -115,15 +116,23 @@ table {
 
 }
 
-.popover_text{
-	font-size: 1rem;
+div.scroll-container {
+    overflow: auto;
+    white-space: nowrap;
 }
-@media (max-width: 768px) {
-  .popover_text {
-    font-size: 1.2rem;
-  }
+  
+/* End of recipe details CSS classes */
+
+/* Here starts the recipe card css */
+/* We also used recipe_img class on the scroll galery for home page */
+
+.img_bg_overlay{
+	background-color: rgba(0, 0, 0, 0.386);
 }
 
+/* End of recipe details CSS classes */
+
+/* Here starts the like button css */
 .like_btn {
   position: absolute;
   bottom: -0.3125rem;     
@@ -141,18 +150,673 @@ table {
   box-shadow: 0 0 0.125rem rgba(0, 0, 0, 0.5); /* 2px */
 }
 
-div.scroll-container {
-    overflow: auto;
-    white-space: nowrap;
+.popover_text{
+	font-size: 1rem;
 }
+@media (max-width: 768px) {
+  .popover_text {
+    font-size: 1.2rem;
+  }
+}
+
+.btn_overlay{
+	z-index: 3;
+	max-height: 5rem;
+}
+
+/* End of like button CSS */
+/*
+/* Here starts the share button css */
+.btn_share{
+	font-size: 2rem;
+}
+
+.whatts_btn{
+	color: #25D366;
+}
+
+.pinterest_btn{
+	color: #E60023;
+}
+
+.twitter_btn{
+	color: #000000;
+}
+
+.face_btn{
+	color: #1877F2;
+}
+
+.paste_btn{
+	color: grey;
+}
+
+.print_btn{
+	color:rgb(136, 136, 179)
+}
+
+
+/* End of share button CSS */
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CSS main-row profile (Alice) */
+
+
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f8f8;
+}
+
+/* CSS left sidebar profile (Alice) */
+
+.sidebar-left-profile {
+    flex: 0 0 240px;
+}
+
+.links-menu {
+  background-color: #ca3e49 ;
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  height: 100%;
+}
+
+.links-menu ul {
+  list-style: none;
+}
+
+.links-menu li + li {
+  margin-top: 1rem;
+}
+
+.links-menu .menu-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.65rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.links-menu .menu-link i {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+}
+
+.links-menu .menu-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.links-menu .menu-link.active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* CSS main profile (Alice) */
+
+.main-column-content{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.edit-perfil {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Foto perfil (Alice) */
+.pic-perfil {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.mask-change-pic {
+  position: absolute;         
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;         
+  background-color: rgba(0, 0, 0, 0.6); 
+  display: flex;              
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;     
+  color: white;               
+  opacity: 0;                 
+  transition: opacity 0.25s ease-in-out;
+  cursor: pointer;            
+}
+
+.change-picture:hover .mask-change-pic {
+  opacity: 1;
+}
+
+.change-picture {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.icon-camera {
+  font-size: 1.2rem;        
+  margin-bottom: 0.4rem;    
+}
+
+.text-change {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 0;                
+}
+
+
+/* Formulario central (Alice) */
+
+.form-perfil .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-perfil .form-label {
+  display: block;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.form-perfil .form-control {
+  max-width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-perfil .form-control:not(:last-child) {
+  margin-bottom: 0.6rem;
+}
+
+.change-email {
+  text-align: right;
+  margin-top: 0.3rem;
+}
+
+.change-email a {
+  font-size: 0.85rem;
+  color: #ca3e49;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.change-email a:hover {
+  text-decoration: underline;
+}
+
+/* CSS right-column (buttons) --> (Alice) */
+.right-profile {
+        height: 700px;   
+        grid-template-columns: 1fr;
+
+        
+}
+
+.b-grids-right {
+    grid-gap: 20px;
+}
+
+/* CSS shopping page (Alice) */
+
+.shopping-page {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f8f8;
+}
+
+.cart-icon {
+  font-size: 1.6rem;
+}
+
+.shopping-list {
+  list-style: none;
+  width: 100%; 
+  margin-bottom: 1.5rem;
+}
+
+.shopping-item {
+  background-color: #ca3e49; 
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+}
+
+.shopping-item:hover {
+  background-color: #b23238;
+}
+
+.remove-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.remove-button:hover {
+  color: #e0e0e0;
+}
+
+.empty-list {
+  color: #777;
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  max-width: 500px;
+}
+
+.reset-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+}
+.reset-button {
+  width: 50%;
+  background-color: #B47E58; 
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
   
-/* End of recipe details CSS classes */
-
-/* Here starts the recipe card css */
-/* We also used recipe_img class on the scroll galery for home page */
-
-.img_bg_overlay{
-	background-color: rgba(0, 0, 0, 0.386);
+}
+.reset-button:hover {
+  background-color: #B47E58;
+  
 }
 
-/* End of recipe details CSS classes */
+/* CSS vista meal planner */
+
+.planner-page {
+  flex: 1;
+  background-color: #ffffff;
+  padding: 2rem;
+}
+
+.planner-header {
+  margin-bottom: 2rem;
+}
+
+.planner-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #2b3e50;
+}
+
+.planner-header p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.date-range-text {
+  font-size: 1rem;
+  color: #2b3e50;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+.date-range-text strong {
+  font-weight: 600;
+}
+
+.date-range-text:hover {
+  color: #1a2734;
+}
+
+.date-edit-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.date-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: #2b3e50;
+}
+
+.date-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.date-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-add,
+.btn-cancel {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-add {
+  background-color: green;
+  color: #fff;
+}
+
+.btn-add:hover {
+  background-color: #3a78c2;
+}
+
+.btn-cancel {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background-color: #c0392b;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.planner-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fafafa;
+  margin-top: 1.5rem;
+}
+
+.planner-table thead {
+  background-color: #eaecef;
+}
+
+.planner-table th,
+.planner-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.planner-table th {
+  font-weight: 600;
+  color: #2b3e50;
+}
+
+.cell-day {
+  background-color: #f0f2f5;
+  font-weight: 600;
+  color: #2b3e50;
+  text-align: left;
+}
+
+.cell-meal {
+  position: relative;
+  width: 1px; /* allows auto-sizing */
+}
+
+.empty-cell {
+  height: 70px;
+  background-color: #fff;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.empty-cell:hover {
+  background-color: #f5f7fa;
+}
+
+.meal-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  height: 70px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.meal-card:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.meal-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.meal-name {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 6px;
+  width: 90%;
+  max-width: 500px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.modal-content h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #2b3e50;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-bottom: 0.8rem;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-actions .btn-add,
+.modal-actions .btn-cancel {
+  width: auto;
+}
+
+/* CSS recipeCard  (Alice)*/
+
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 280px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0.5rem;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s, box-shadow 0.15s; */
+}
+
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-image-container {
+  width: 100%;
+  height: 160px;
+  background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.card-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.no-image-placeholder {
+  font-size: 0.9rem;
+  color: #999;
+}
+
+.card-body {
+  padding: 0.75rem 1rem;
+  flex: 1;
+}
+
+.card-title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.card-title:hover {
+  text-decoration: underline;
+}
+
+.card-nutri {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.card-actions {
+  padding: 0.5rem 1rem 1rem;
+  text-align: right;
+}
+
+.btn-save {
+  background-color: #4a90e2;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn-save:hover {
+  background-color: #3a78c2;
+}
+
+.btn-save.saved {
+  background-color: #f5a623;
+}
+
+.btn-save.saved:hover {
+  background-color: #d48b1f;
+}
+

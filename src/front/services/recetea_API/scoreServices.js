@@ -8,9 +8,9 @@ const authHeaders = () => ({
 });
 
 //Get all score of one recipe
-scoreService.getRecipeScores = async (id) => {
+scoreService.getRecipeScores = async (recipe_id) => {
   try {
-    const resp = await fetch(url + "/api/recipes/" + id + "/scores", {
+    const resp = await fetch(url + "/api/recipes/" + recipe_id + "/scores", {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
@@ -29,9 +29,9 @@ scoreService.getRecipeScores = async (id) => {
 };
 
 // Like/unlike a recipe
-scoreService.toggleScore = async (id) => {
+scoreService.toggleScore = async (recipe_id) => {
   try {
-    const resp = await fetch(url + "/api/user/recipes/" + id + "/score", {
+    const resp = await fetch(url + "/api/user/recipes/" + recipe_id + "/score", {
       method: "POST",
       headers: authHeaders(),
     });
@@ -42,7 +42,8 @@ scoreService.toggleScore = async (id) => {
     return data;
 
   } catch (error) {
-    return error;
+    console.error("Error toggling score:", error);
+    return {success: false, message: error.message}; 
   }
 };
 

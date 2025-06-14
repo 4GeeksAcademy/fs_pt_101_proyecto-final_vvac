@@ -29,16 +29,34 @@ export const LogIn = () => {
         try {
             const data = await userServices.login(formData);
             
-            if (data.success){
+            // Ensure token exists before saving
+            if (data.token) { 
+                const payload = JSON.parse(atob(data.token.split('.')[1]));
+                const userId = payload.sub;
+
+                //Will store user_id and token to make more easier to access
+                const userData = {
+                    ...data,
+                    user_id: userId
+                };
+
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                if (data.success){
                 // Add navigate here after we have made the route
-                dispatch({type: 'logIn', payload:data});
-                console.log(data, "user logged");
+                dispatch({type: 'logIn', payload:userData});
+                navigate("/profile")
+                console.log(userData, "user logged");
                 
-            } else{
-                window.alert(data.message)
+                } else{
+                    window.alert(data.message)
+                    navigate("/demo")
+                }
             }
+
         } catch(error){
-            window.alert(error)
+            console.log("Login error:", error);
+            window.alert("Something went wrong. Please try again.")
         }
     }
 
