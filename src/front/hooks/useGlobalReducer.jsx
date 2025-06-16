@@ -16,6 +16,11 @@ export function StoreProvider({ children }) {
     // Initialize reducer with the initial state.
     const [store, dispatch] = useReducer(storeReducer, initialStore())
 
+    // Load the page once only
+    useEffect (() => {
+        loadRecipes()
+    }, [])
+
     const loadRecipes = async () => {
         try {
             const resp = await recipeServices.getAllRecipes();
@@ -25,21 +30,6 @@ export function StoreProvider({ children }) {
             console.log(error);
         }
     }
-
-    // Load the page once only
-    useEffect (() => {
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-
-        if (token && user) {
-        dispatch({
-            type: "logIn",
-            payload: { token, user: JSON.parse(user) },
-        });
-        }
-
-        loadRecipes()
-    }, [])
 
 
     // Provide the store and dispatch method to all child components.

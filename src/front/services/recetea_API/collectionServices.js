@@ -17,14 +17,10 @@ collectionServices.getUserCollections = async () => {
 
     const data = await resp.json();
 
-    if (!resp.ok) {
-      return { success: false, error: data.error };
-    }
-
-    return { success: true, ...data };
-
+    if (!resp.ok) throw new Error(data.error || data.message); //Test Alice --> incorporar 1nuevo error para llegar al catch del componente recipeCards!!
+    return data;
   } catch (error) {
-     return { success: false, error: error.message }
+    return error;
   }
 };
 
@@ -62,14 +58,10 @@ collectionServices.addToCollection = async (recipe_id) => {
 
     const data = await resp.json();
 
-    if (!resp.ok) {
-      return { success: false, error: data.error || 'Unknown error' };
-    }
-
-    return { success: true, ...data };
-
+    if (!resp.ok) throw new Error(data.error);
+    return data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return error;
   }
 };
 
@@ -86,14 +78,10 @@ collectionServices.removeFromCollection = async (recipe_id) => {
 
     const data = await resp.json();
 
-    if (!resp.ok) {
-      return { success: false, error: data.error || 'Unknown error' };
-    }
-
-    return { success: true, ...data };
-
+    if (!resp.ok) throw new Error(data.error);
+    return data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return error;
   }
 };
 

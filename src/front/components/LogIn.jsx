@@ -28,28 +28,27 @@ export const LogIn = () => {
         e.preventDefault();
         try {
             const data = await userServices.login(formData);
-            console.log("Login response data:", data);
             
             // Ensure token exists before saving
             if (data.token) { 
+                const payload = JSON.parse(atob(data.token.split('.')[1]));
+                const userId = payload.sub;
 
-                // Store token on store
-                localStorage.setItem("token", data.token);
+                //Will store user_id and token to make more easier to access
+                const userData = {
+                    ...data,
+                    user_id: userId
+                };
 
-                // Store full user data on store to easy fetch
-                localStorage.setItem("user", JSON.stringify(data.user));
-                console.log(data.user);
-                
+                localStorage.setItem('user', JSON.stringify(userData));
 
                 if (data.success){
-                    // Dispatch user data including token if needed
-                    dispatch({ type: "logIn", payload: { token: data.token, user: data.user } });
-
-                    //Will keep on home page but for users
-                    navigate("/profile")
+                // Add navigate here after we have made the route
+                dispatch({type: 'logIn', payload:userData});
+                navigate("/profile")
+                console.log(userData, "user logged");
                 
                 } else{
-                    //we can set another page here or change to a banner
                     window.alert(data.message)
                     navigate("/demo")
                 }
@@ -59,7 +58,7 @@ export const LogIn = () => {
             console.log("Login error:", error);
             window.alert("Something went wrong. Please try again.")
         }
-    }    
+    }
 
     return (
         <div className="containerf-fluid">

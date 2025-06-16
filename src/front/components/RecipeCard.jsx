@@ -31,7 +31,7 @@ export const RecipeCard = (props) => {
             <div 
             className="card bg-dark text-white mx-2" 
             onClick={handleClick}>
-                <img src={props.url} className="img-fluid w-100 card-img recipe_img" alt="recipe_img"/>
+                <img src={props.imageUrl} className="card-img recipe_img" alt="recipe_img"/>
                 <div className="card-img-overlay img_bg_overlay">
                     <h2 className="card-title">{props.name}</h2>
                 </div>
