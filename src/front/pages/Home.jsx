@@ -8,7 +8,6 @@ import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 
 //components
 import { RecipeCard } from "../components/RecipeCard.jsx";
-import { LogIn } from "../components/LogIn.jsx";
 
 export const Home = () => {
 
@@ -58,7 +57,6 @@ export const Home = () => {
 						/>)
 					}
 				</div>
-				<LogIn />
 			</div>
 		</div>
 	);

@@ -46,6 +46,19 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+/* From here is LogIn CSS classes */
+
+.logIn_title{
+  color: #b8212e;
+  font-size: 3.5rem;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.516);
+}
+
+.logIn_background {
+  background-color: #f3e8d98b;
+  background-image: radial-gradient(#e6394764 5px, transparent 6px);
+  background-size: 50px 50px;
+}
 
 
 /* From here is recipe details CSS classes */
@@ -439,14 +452,12 @@ div.scroll-container {
 
 /* CSS right-column (buttons) --> (Alice) */
 .right-profile {
-        height: 700px;   
-        grid-template-columns: 1fr;
-
-        
+  height: 700px;   
+  grid-template-columns: 1fr;
 }
 
 .b-grids-right {
-    grid-gap: 20px;
+  grid-gap: 20px;
 }
 
 /* CSS shopping page (Alice) */
