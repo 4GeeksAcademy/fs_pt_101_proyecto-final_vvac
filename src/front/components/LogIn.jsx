@@ -50,8 +50,8 @@ export const LogIn = () => {
                 
                 } else{
                     //we can set another page here or change to a banner
-                    window.alert(data.message)
-                    navigate("/demo")
+                    window.alert(data.error)
+                    navigate("/login")
                 }
             }
 
