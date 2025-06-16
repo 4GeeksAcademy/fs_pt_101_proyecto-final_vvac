@@ -218,9 +218,8 @@ div.scroll-container {
 
 /* CSS left sidebar profile (Alice) */
 
-
 .sidebar-left-profile {
-  flex: 0 0 240px;
+    flex: 0 0 240px;
 }
 
 .links-menu {
@@ -261,32 +260,6 @@ div.scroll-container {
 
 .links-menu .menu-link.active {
   background-color: rgba(255, 255, 255, 0.3);
-}
-
-.btn-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 20%;
-  background-color: #d4cbcb;
-  color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: background-color 0.3s;
-}
-
-
-
-.back-button-container {
- 
-  left: -1.5rem; 
-  z-index: 1000;
-}
-
-.btn-circle:hover {
-  background-color: #c55662;
 }
 
 /* CSS main profile (Alice) */
@@ -489,7 +462,7 @@ div.scroll-container {
   
 }
 
-/* CSS vista meal planner (ALICE) */
+/* CSS vista meal planner */
 
 .planner-page {
   flex: 1;

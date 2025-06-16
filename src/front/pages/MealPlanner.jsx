@@ -1,12 +1,8 @@
-import { useState } from "react";
-import { TurnHome } from "../components/buttons/TurnHome";
-import { LinksMenu } from "../components/LinksMenu";
-import { RightMenu } from "../components/RightMenu";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react"
+import { LinksMenu } from "../components/LinksMenu"
+import { RightMenu } from "../components/RightMenu"
 
 export const MealPlanner = () => {
-
-    const navigate = useNavigate();
 
     // const { store, dispatch } = useGlobalReducer() ---> verificar si queda pendiente incorporar acciones.
 
@@ -158,13 +154,9 @@ export const MealPlanner = () => {
 
                 <div className="container text-center sidebar-left-profile">
                     <div className="row align-items-start">
-                        
-                        <div className="col-12 col-md-3">
+                        <div className="col-3">
 
-                            <div className="d-flex align-items-start">
-                                <TurnHome />
-                                <LinksMenu />
-                            </div>
+                            <LinksMenu />
 
                         </div>
 
