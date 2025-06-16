@@ -13,9 +13,10 @@ with app.app_context():
 
     # Crear 3 usuarios
     users = [
-        User(username="user1", email="user1@mail.com", password=generate_password_hash('user123'), status=UserStatus.active, photo_url="https://loremflickr.com/400/400/food"),
-        User(username="user2", email="user2@mail.com", password=generate_password_hash('user123'), status=UserStatus.active, photo_url="https://loremflickr.com/400/400/food"),
-        User(username="user3", email="user3@mail.com", password=generate_password_hash('user123'), status=UserStatus.active, photo_url="https://loremflickr.com/400/400/food"),
+        User(username="user4", email="alice@gmail.com", password=generate_password_hash('12345678'), status=UserStatus.active),
+        User(username="user1", email="user1@mail.com", password=generate_password_hash('user123'), status=UserStatus.active),
+        User(username="user2", email="user2@mail.com", password=generate_password_hash('user123'), status=UserStatus.active),
+        User(username="user3", email="user3@mail.com", password=generate_password_hash('user123'), status=UserStatus.active)
     ]
     db.session.add_all(users)
     db.session.commit()
@@ -82,7 +83,7 @@ with app.app_context():
         Media(
             recipe_id=recipes[i].id,
             type_media=MediaType.IMAGE,
-            url="https://loremflickr.com/400/400/food"
+            url=f"https://example.com/receta_{i+1}.jpg"
         ) for i in range(10)
     ]
     db.session.add_all(medias)

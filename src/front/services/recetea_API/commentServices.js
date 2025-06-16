@@ -12,18 +12,18 @@ const authHeaders = () => ({
 // GET all comments by recipe ID (no token needed)
 commentServices.getCommentsByRecipe = async (recipe_id) => {
   try {
-    const resp = await fetch(url + "/api/recipes/" + recipe_id + "/comments", {
+    const resp = await fetch(url + "/recipes/" + recipe_id + "/comments", {
       method: "GET",
     });
 
     const data = await resp.json();
 
     if (!resp.ok) throw new Error(data.error || data.message);
-    return data ? data : [];
+    return data;
 
   } catch (error) {
     console.error("Error fetching comments:", error);
-    return [];
+    return error;
   }
 };
 

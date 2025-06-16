@@ -61,45 +61,20 @@ table {
 .recipe_img{
 	object-fit: cover;
 	width: 100%;
-  min-height: 24rem;
-	max-height: 24rem;
+	height: 24rem;
 
 }
-
-.icon_prep_type{
-  font-size: 1.7rem;
-}
-
-.prep_border {
-  border-right: 0.15rem solid #f1ecd1;
-  border-bottom: none;
-}
-
-.text_prep_type{
-  font-weight: 600;
-  font-size: 0.5rem;
-}
-
 
 .steps_bg{
-  background-color: #C25C52;
-}
-
-.border_steps{
-	border-bottom: dashed #ffd67d;
-}
-
-.title_ing_steps{
-  font-size: 1rem;
+    background-color: #C25C52;
 }
 
 .text_ing1{
 	font-weight: 500;
-  font-size: 2rem;
 }
 
-.text_ing_steps{
-  font-size: 1.5rem;
+.text_steps{
+	border-bottom: 30px dashed #e4a10f;
 }
 
 .user_img{
@@ -113,13 +88,23 @@ table {
 }
 
 .text_published{
-	font-size: 1.2rem;
+	font-size: 1rem;
 	font-style: italic;
 }
 
 .recipe_card_prep{
-  background-color: #C25C52;
-  width: 45%;
+    background-color: #C25C52;
+}
+
+.prep-border {
+  border-bottom: 2px solid #f1ecd1;
+}
+
+@media (min-width: 768px) {
+  .prep-border {
+    border-bottom: none;
+    border-right: 2px solid #ccc;
+  }
 }
 
 .nutricional_title{
@@ -148,16 +133,7 @@ div.scroll-container {
 /* End of recipe details CSS classes */
 
 /* Here starts the like button css */
-.like_btn{
-  min-width: 50px;
-  max-width: 50px;
-  height: 50px !important;
-  border: none;
-  padding: 0;
-  border-radius: 15rem;
-}
-
-.like_btn2 {
+.like_btn {
   position: absolute;
   bottom: -0.3125rem;     
   right: -0.3125rem;    
@@ -177,19 +153,23 @@ div.scroll-container {
 .popover_text{
 	font-size: 1rem;
 }
+@media (max-width: 768px) {
+  .popover_text {
+    font-size: 1.2rem;
+  }
+}
 
 .btn_overlay{
-	z-index: 7;
+	z-index: 3;
 	max-height: 5rem;
 }
 
 /* End of like button CSS */
 /*
 /* Here starts the share button css */
-.buttons_recipe{
-	font-size: 1rem;
+.btn_share{
+	font-size: 2rem;
 }
-
 
 .whatts_btn{
 	color: #25D366;
@@ -213,26 +193,6 @@ div.scroll-container {
 
 .print_btn{
 	color:rgb(136, 136, 179)
-}
-
-/*Comments CSS */
-
-.comment_img{
-	border-radius: 50%;
-	min-width: 4rem;
-	max-width: 4rem;
-	min-height: 3rem;
-	max-height: 4rem;
-	object-fit: cover;
-	display: block;
-}
-
-.comment_row{
-  background-color: white;
-}
-
-.comment_box{
-  border-color: rgba(128, 128, 128, 0.767);
 }
 
 
@@ -885,107 +845,5 @@ div.scroll-container {
 
 .btn-save.saved:hover {
   background-color: #d48b1f;
-}
-
-/* Media based classes will only adapt to smal screens to make more easy to read */
-
-@media (max-width: 62rem) {
-
-  .popover_text {
-    font-size: 1.2rem;
-  }
-
-  .buttons_recipe{
-    font-size: 2.5rem !important;
-  }
-
-  .recipe_img{
-    object-fit: cover;
-    width: 100%;
-    height: 25rem;
-
-  }
-
-  .text_prep_type{
-    font-weight: 650;
-    font-size: 2.5rem;
-  }
-
-  .title_ing_steps{
-    font-weight: 600;
-    font-size: 3rem;
-  }
-
-  .text_ing1{
-    font-weight: 500;
-    font-size: 1.5rem;
-  }
-  .text_ing_steps{
-    font-size: 1.5rem;
-  }
-
-  .recipe_card_prep{
-    background-color: #C25C52;
-    width: 100%;
-  }
-
-  .icon_prep_type{
-    font-size: 2rem;
-
-  }
-
-  .prep_border {
-    border-bottom: 2px solid #ccc;
-    border-right: none
-  }
-
-}
-
-@media (min-width: 62.1rem), (max-width: 75rem){
-  .popover_text {
-    font-size: 1.2rem;
-  }
-
-  .recipe_img{
-    object-fit: cover;
-    width: 90%;
-    height: 24rem;
-
-  }
-
-  .buttons_recipe{
-    font-size: 1.7rem;
-  }
-
-  .recipe_card_prep{
-    background-color: #C25C52;
-    width: 100%;
-  }
-
-  .icon_prep_type{
-    font-size: 1.3rem;
-  }
-
-  .text_prep_type{
-    font-weight: 600;
-    font-size: 1rem;
-  }
-
-  .title_ing_steps{
-    font-weight: 600;
-    font-size: 2.5rem;
-  }
-
-  .text_ing1{
-    font-weight: 500;
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .text_ing_steps{
-    font-size: 1rem;
-  }
-
-
 }
 
