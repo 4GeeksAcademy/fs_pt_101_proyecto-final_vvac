@@ -20,10 +20,10 @@ export const PopOver = ({ title, content, children })=> {
     // Attach ref and data attribute to child button
     return (
         <>
-        {React.cloneElement(children, {
-            ref,
-            "data-bs-toggle": "popover",
-        })}
+            {React.cloneElement(children, {
+                ref,
+                "data-bs-toggle": "popover",
+            })}
         </>
     );
 }

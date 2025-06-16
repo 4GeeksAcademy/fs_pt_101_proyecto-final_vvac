@@ -127,7 +127,7 @@ export const ShareButton = ({ text, url, printRef, recipe_id }) => {
             className="btn border-0" 
             data-bs-toggle="modal" 
             data-bs-target="#staticBackdrop">
-                <FontAwesomeIcon icon={faSquareShareNodes} className="pe-3 btn_share color_icons border-end border-secondary"/>
+                <FontAwesomeIcon icon={faSquareShareNodes} className="pe-3 buttons_recipe color_icons border-end border-secondary"/>
             </button>
 
             {/* Modal setting here */}
@@ -146,39 +146,39 @@ export const ShareButton = ({ text, url, printRef, recipe_id }) => {
                             <button type="button" 
                             className="btn p-0"
                             onClick={handleWhatsAppShare}>
-                                <FontAwesomeIcon icon={faSquareWhatsapp} className="btn_share whatts_btn"/>
+                                <FontAwesomeIcon icon={faSquareWhatsapp} className="buttons_recipe whatts_btn"/>
                             </button>
 
                             <button type="button" 
                             className="btn p-0 ms-3"
                             onClick={handlePinterestShare}>
-                                <FontAwesomeIcon icon={faPinterest} className="btn_share pinterest_btn"/>
+                                <FontAwesomeIcon icon={faPinterest} className="buttons_recipe pinterest_btn"/>
                             </button>
 
                             <button type="button" 
                             className="btn p-0 ms-3"
                             onClick={handleTwitterShare}>
-                                <FontAwesomeIcon icon={faSquareXTwitter} className="btn_share twitter_btn"/>
+                                <FontAwesomeIcon icon={faSquareXTwitter} className="buttons_recipe twitter_btn"/>
                             </button>
 
                             <button type="button" 
                             className="btn p-0 ms-3"
                             onClick={handleFacebookShare}>
-                                <FontAwesomeIcon icon={faFacebook} className="btn_share face_btn"/>
+                                <FontAwesomeIcon icon={faFacebook} className="buttons_recipe face_btn"/>
                             </button>
 
                             <div className="text-center border-top border-secondary my-3">
                                 <button type="button" 
                                 className="btn p-0 ms-3 my-3 border-0"
                                 onClick={handleCopy}>
-                                    <FontAwesomeIcon icon={faPaste} className="btn_share paste_btn"/>
+                                    <FontAwesomeIcon icon={faPaste} className="buttons_recipe paste_btn"/>
                                     <div className="mt-1">{copied ? "Copied!" : "Copy URL"}</div>
                                 </button>
 
                                 <button type="button" 
                                 className="btn p-0 ms-3 my-3 border-0"
                                 onClick={handlePrint}>
-                                    <FontAwesomeIcon icon={faPrint} className="btn_share print_btn"/>
+                                    <FontAwesomeIcon icon={faPrint} className="buttons_recipe print_btn"/>
                                     <div className="mt-1">{printed ? "Sent to print!" : "Print"}</div>
                                 </button>
                             </div>

@@ -51,17 +51,17 @@ export const NutricionalTable = () =>{
 
         <div className="card p-2 ms-auto my-3 my-md-0 mt-md-3">
             <div className="card-body">
-                <div className="card-title nutricional_title">
-                    <h5>Nutricional Vaue</h5>
+                <div className="card-title">
+                    <h5 className="nutricional_title fs-3">Nutricional Vaue</h5>
                 </div>
 
                 <div className="border-bottom my-2 bg-secondary my-3"></div>
 
                 <ul className="list-group list-group-flush">
-                    <li className="text-end text-danger fw-bold fst-italic fs-6">
+                    <li className="text-end text-danger fw-bold fst-italic fs-5">
                         {(totalNutrition.calories / portions).toFixed(0)} Kcal
                     </li>
-                    <div className="row g-0 mt-3 fs-6">
+                    <div className="row g-0 mt-3 fs-5">
                         <div className="col-12 col-md-6">
                         <li className="list-group-item bg-light d-flex justify-content-between">
                             <span className="fw-bold">Total carbs:</span>

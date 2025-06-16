@@ -17,10 +17,12 @@ class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(String(30), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    photo_url: Mapped[str] = mapped_column(String, nullable=True)
     password: Mapped[str] = mapped_column(nullable=False)  # guarda como texto plano hasta que se hashee
     status: Mapped[UserStatus] = mapped_column(Enum(UserStatus), default=UserStatus.active, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    
     #Relatioship with other tables
     score: Mapped[list["RecipeScore"]] = relationship(back_populates="user")
     comments: Mapped[list["Comment"]] = relationship(back_populates="user")
@@ -34,6 +36,7 @@ class User(db.Model):
             "id": self.id,
             "username": self.username,
             "email": self.email,
+            "photo_url": self.photo_url,
             "status": self.status.value,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
@@ -59,6 +62,7 @@ class Comment(db.Model):
             "user_id": self.user_id,
             "recipe_id": self.recipe_id,
             "username": self.user.username,
+            "user_photo": self.user.photo_url,
             "content": self.content,
             "timestamp": self.published.isoformat() if self.published else None
         }
@@ -106,6 +110,7 @@ class Recipe(db.Model):
             "title": self.title,
             "author": self.author,
             "username": self.user.username,
+            "user_photo": self.user.photo_url,
             "media": [media.serialize() for media in self.media],
             "published": self.published.isoformat() if self.published else None,
             "difficulty_type": self.difficulty_type.value,

@@ -1,10 +1,11 @@
 
 export const initialStore=()=>{
   return{
-    user: localStorage.getItem('user') == null ? JSON.parse(localStorage.getItem('user')) : null,
+    token: localStorage.getItem("token") || null,
+    user:localStorage.getItem("user") || null,
     recipes: [],
     recipe: null,
-    collections: null,
+    collections: [],
     scores: [],
     shoppingList: [
       "Cauliflower",
@@ -36,6 +37,9 @@ export default function storeReducer(store, action = {}) {
   switch(action.type){
     case 'logout':
 
+    //remove the client token and user info from local
+      localStorage.removeItem('token')
+
       //remove the client token and user info from local
       localStorage.removeItem('user')
       return {
@@ -46,7 +50,8 @@ export default function storeReducer(store, action = {}) {
     case 'logIn':
       return {
         ...store,
-        user: action.payload
+        token: action.payload.token,
+        user: action.payload.user
       };
 
     case 'get_user':
@@ -91,6 +96,10 @@ export default function storeReducer(store, action = {}) {
     }
 
     case 'like': {
+
+      //take data from action payload
+      //we use recipe_id to create an element on the list and store data 
+      // because we need to know how many liked the recipe
       const { recipe_id, user_id } = action.payload;
       const newScoreEntry = {
         recipe_id: recipe_id,
@@ -132,6 +141,34 @@ export default function storeReducer(store, action = {}) {
         ...store,
         shoppingList: []
       };
+
+    case 'get_user_collection': {
+      return {
+        ...store,
+        collections: action.payload || []
+      };
+    }
+
+    case 'add_recipe': {
+      return {
+      ...store,
+        collections: action.payload
+      };
+    }
+
+    case 'remove_recipe': {
+      return {
+        ...store, collections: action.payload
+      }
+    }
+
+    case 'get_all_comments': {
+      return {
+        ...store, 
+        comments: action.payload || []
+      }
+    }
+
     case 'set_hello':
       return {
         ...store,

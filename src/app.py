@@ -12,6 +12,7 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 from itsdangerous import URLSafeTimedSerializer
+from datetime import timedelta
 
 # from models import Person
 
@@ -23,6 +24,7 @@ app.url_map.strict_slashes = False
 
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=1)  # Set here timing of token
 jwt = JWTManager(app)
 
 # database configuration

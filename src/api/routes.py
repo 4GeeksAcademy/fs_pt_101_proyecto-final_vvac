@@ -19,9 +19,8 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 
-# Placeholder image URL for recipes without images
-PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/400x300?text=No+Image"
-
+#Placeholder image URL for recipes without images
+PLACEHOLDER_IMAGE_URL = "https://placehold.co/400x300?text=No+Image"
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -107,9 +106,9 @@ def login():
 
        # Generate str token as it's not possible to be a number
         token = create_access_token(identity=str(user.id))
-
-        return jsonify({"success": True, "token": token}), 200
-
+  
+        return jsonify({"success": True, "token": token, "user": user.serialize()}), 200
+    
     except Exception as e:
         print(e)
         return jsonify({"error": str(e)}), 500
@@ -849,14 +848,12 @@ def get_comments(comment_id):
 
 
 @api.route('/recipes/<int:recipe_id>/comments', methods=['GET'])
-def get_comment(comment_id):
+def get_comment(recipe_id):
 
-    comment = Comment.query.get(comment_id)
-
-    if comment is None:
-        return jsonify({"error": "Comment not found"}), 404
-
-    return jsonify(comment.serialize()), 200
+    stmt = select(Comment).where(Comment.recipe_id == recipe_id)
+    comments = db.session.execute(stmt).scalars().all()
+    
+    return jsonify([comment.serialize() for comment in comments]), 200
 
 # POST new comment by recipe ID
 
@@ -1142,23 +1139,19 @@ def get_user_collections():
 
     user_id = get_jwt_identity()
 
-    stmt_user = select(Collection).where(Collection.user_id == user_id)
-    collection = db.session.execute(stmt_user).scalars().all()
-
     if user_id is None:
         return jsonify({"error": "User not found, please log in or sign up."}), 400
 
-    # Añado este pequeño control por si no hay ninguna coleccion para el usuario dado, evitar el error.
-    # return jsonify([c.serialize() for c in collection]), 200
-    if collection is None:
-        return '[]'
-    else:
-        return jsonify([c.serialize() for c in collection]), 200
+    stmt_user = select(Collection).where(Collection.user_id == user_id)
+    collection = db.session.execute(stmt_user).scalars().all()
+
+    return jsonify({ 
+        "data": [c.serialize() for c in collection],  
+        "exists": bool(collection),
+        "success": True }), 200
 
 # POST to save a recipe to a user's collection
-
-
-@api.route('user/collection/recipes/<int:recipe_id>', methods=['POST'])
+@api.route('/user/collection/recipes/<int:recipe_id>', methods=['POST'])
 @jwt_required()
 def add_to_collection(recipe_id):
 
@@ -1183,15 +1176,13 @@ def add_to_collection(recipe_id):
         db.session.add(add_recipe)
         db.session.commit()
 
-        return jsonify(add_recipe.serialize()), 201
-
+        return jsonify({"data": add_recipe.serialize(), "success": True}), 201
+    
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 # DELETE a saved recipe from a user's collection
-
-
-@api.route('user/collection/recipes/<int:recipe_id>', methods=['DELETE'])
+@api.route('/user/collection/recipes/<int:recipe_id>', methods=['DELETE'])
 @jwt_required()
 def delete_from_collection(recipe_id):
 
