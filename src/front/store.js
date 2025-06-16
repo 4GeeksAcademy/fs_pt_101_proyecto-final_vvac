@@ -117,7 +117,6 @@ export default function storeReducer(store, action = {}) {
         }
       };
     }
-
     
     case 'unlike': {
       const { recipe_id, user_id } = action.payload;
@@ -168,6 +167,12 @@ export default function storeReducer(store, action = {}) {
         comments: action.payload || []
       }
     }
+
+    case 'add_user':
+      return {
+        ...store,
+        user: action.payload
+      };
 
     case 'set_hello':
       return {
