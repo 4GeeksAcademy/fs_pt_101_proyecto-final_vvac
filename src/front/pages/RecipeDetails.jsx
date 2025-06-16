@@ -94,20 +94,6 @@ export const RecipeDetails = () => {
             .filter(step => step.length > 0);
     };
 
-    //desde aqui (alice)
-    const handleToggleCollection = async (e) => {
-        e.preventDefault();
-        try {
-            // const data = await ;
-            const resultado = await collectionServices.ToggleCollection(id)
-            
-        } catch (error) {
-            window.alert("Something went wrong. Please try again: " + error)
-        }
-    }
-    // hasta aqui
-
-
     const stepsArray = splitSteps(store.recipe?.steps); 
 
     useEffect(() => {
