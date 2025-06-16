@@ -39,7 +39,8 @@ export const CollectionFav = () => {
 
     const fetchCollectionsRaw = async () => {
       const data = await collectionServices.getUserCollections()
-      const formatted = (Array.isArray(data) ? data : data.collection || []).map(item => ({
+      console.log("DESDE DENTRO DE LA FUNCION: " + JSON.stringify(data.data))
+      const formatted = (Array.isArray(data.data) ? data.data : data || []).map(item => ({
         id: item.recipe_id,               // aquí recipe_id
         userId: item.user_id,
       }))
@@ -59,6 +60,7 @@ export const CollectionFav = () => {
           ])
           setRecipeItemsRaw(yourRaw)
           setCollectionItemsRaw(collRaw)
+          console.log("--------------------> " + JSON.stringify(collRaw))
 
           // 2) extraemos IDs y deduplicamos
           const ids = [

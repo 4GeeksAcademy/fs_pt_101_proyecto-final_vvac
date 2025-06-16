@@ -20,7 +20,6 @@ collectionServices.getUserCollections = async () => {
     if (!resp.ok) {
       return { success: false, error: data.error };
     }
-
     return { success: true, ...data };
 
   } catch (error) {
