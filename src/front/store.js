@@ -1,7 +1,7 @@
 
 export const initialStore=()=>{
   return{
-    user: localStorage.getItem('user')? JSON.parse(localStorage.getItem('user')) : null,
+    user: localStorage.getItem('user') == null ? JSON.parse(localStorage.getItem('user')) : null,
     recipes: [],
     recipe: null,
     collections: null,
@@ -60,6 +60,12 @@ export default function storeReducer(store, action = {}) {
         ...store,
         user: action.payload
       };
+      
+      case 'change_email':
+        return {
+          ...store,
+          user: action.payload 
+        };
 
     case 'get_all_recipes':
       return {
@@ -158,6 +164,7 @@ export default function storeReducer(store, action = {}) {
         ...store,
         collections: store.collections.filter(id => id !== action.payload)
       };
+
 
 
 

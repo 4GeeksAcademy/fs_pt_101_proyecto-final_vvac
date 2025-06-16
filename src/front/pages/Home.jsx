@@ -48,11 +48,12 @@ export const Home = () => {
 
 					{/* maping over RecipeCards to create cards based on the data */}
 					{
+
 						store.recipes?.map((el) => <RecipeCard
 							key={el.id}
-							recipe_id={el.id}
-							title={el.title}
-							url={el.media?.[0]?.url}
+							id={el.id}
+							name={el.title}
+							imageUrl={el.media?.[0]?.url}
 
 						/>)
 					}
