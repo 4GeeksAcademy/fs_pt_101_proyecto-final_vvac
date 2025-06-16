@@ -184,7 +184,7 @@ export const Profile = () => {
                                             </p>
 
                                             <label htmlFor="Email1" className="form-label">Email address</label>
-                                            <input type="email" className="form-control" id="Email1" onChange={handleInputChangeMail} placeholder="the_bestcooker@mail.com" />
+                                            <input type="email" className="form-control" id="Email1" onChange={handleInputChangeMail} placeholder={store.user?.email} />
 
                                             <p className="change-email">
                                                 {/* Link no existe aun! o sera solo un modal?? */}

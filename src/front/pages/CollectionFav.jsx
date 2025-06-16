@@ -112,7 +112,7 @@ export const CollectionFav = () => {
             key={recipe.id}
             id={recipe.id}
             name={recipe.title}
-            imageUrl={recipe.media?.[0]?.url || ""}
+            url={recipe.media?.[0]?.url || ""}
             nutriScore={recipe.nutriScore}
             isSaved={false}
             onClick={() => console.log("Detalle", recipe.id)}
@@ -136,7 +136,7 @@ export const CollectionFav = () => {
             key={r.id}
             id={r.id}
             name={r.name}
-            imageUrl={r.imageUrl}
+            url={r.imageUrl}
             nutriScore={r.nutriScore}
             isSaved={false}
             onClick={() => console.log("Detalle usuario", r.id)}
@@ -159,7 +159,7 @@ export const CollectionFav = () => {
             key={c.id}
             id={c.id}
             name={c.title}
-            imageUrl={c.media?.[0]?.url || ""}
+            url={c.media?.[0]?.url || ""}
             nutriScore={c.nutriScore}
             isSaved={true}
             onClick={() => console.log("Colección detalle", c.id)}
