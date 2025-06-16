@@ -207,9 +207,6 @@ export default function storeReducer(store, action = {}) {
         collections: store.collections.filter(id => id !== action.payload)
       };
 
-
-
-
     default:
       throw Error('Unknown action.');
   }    
