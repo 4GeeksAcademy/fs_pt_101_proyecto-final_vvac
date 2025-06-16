@@ -30,7 +30,7 @@ export const RecipeDetails = () => {
 
     const { store, dispatch } = useGlobalReducer();
     const printRef = useRef();
-
+    // console.log("----------------> " + JSON.stringify(store))
     const { id } = useParams();
     const portions = store.recipe?.portions;
 

@@ -208,7 +208,7 @@ export const Profile = () => {
                                         </div>
                                         <div className="actions-profile">
 
-                                            <button type="submit" className="btn btn-secondary" onClick={handleSubmitUpdatePasswd}>Update</button>
+                                            <button type="submit" className="btn btn-secondary" onClick={handleSubmitUpdatePasswd}>Change password</button>
                                             <button type="reset" className="btn btn-danger ms-2">Cancel</button>
                                         </div>
                                     </form>
@@ -250,6 +250,7 @@ export const Profile = () => {
                                 onClick={() => { document.activeElement?.blur(); }}></button>
                         </div>
                         <div className="modal-body">
+                            <p className="">You are going to delete this account once erased cannot be retrieved.</p>
                             <button type="button" className="btn btn-danger p-0" data-bs-dismiss="modal" aria-label="Delete&Close" onClick={handleDeleteAccount}>YES</button>
                             <button type="button" className="btn btn-secondary p-0 ms-3" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                         </div>
