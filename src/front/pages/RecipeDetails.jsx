@@ -19,7 +19,6 @@ import { LikeButton } from '../components/buttons/likeButton.jsx';
 import { LogOut } from "../components/LogOut.jsx";
 import { ShareButton } from "../components/buttons/shareButton.jsx";
 import { NutricionalTable } from "../components/NutricionalTable.jsx";
-import collectionServices from "../services/recetea_API/collectionServices.js"
 
 export const RecipeDetails = () => {
 
@@ -62,20 +61,6 @@ export const RecipeDetails = () => {
             .filter(step => step.length > 0);
     };
 
-    //desde aqui (alice)
-    const handleToggleCollection = async (e) => {
-        e.preventDefault();
-        try {
-            // const data = await ;
-            const resultado = await collectionServices.ToggleCollection(id)
-            
-        } catch (error) {
-            window.alert("Something went wrong. Please try again: " + error)
-        }
-    }
-    // hasta aqui
-
-
     const stepsArray = splitSteps(store.recipe?.steps);
 
     // Fetch of the recipe by recipe_id
@@ -85,8 +70,8 @@ export const RecipeDetails = () => {
 
     console.log(store.user?.token);
     console.log("My store.user: ", store.user);
+    
 
-     
     useEffect(() => {
         getOneRecipe();
     }, [id]);
@@ -185,7 +170,7 @@ export const RecipeDetails = () => {
                     {/* All buttons: Shopping list, menu plan, share and add to collection */}
                     <div className="row ps-2">
                         <div className="col-12 d-flex">
-                            <div className=" pe-3 fs-2 color_icons border-end border-secondary" onClick={handleToggleCollection}><FontAwesomeIcon icon={faBook} /></div>
+                            <div className=" pe-3 fs-2 color_icons border-end border-secondary"><FontAwesomeIcon icon={faBook} /></div>
                             <ShareButton
                                 text="Check this out!"
                                 url={window.location.href}
@@ -199,13 +184,13 @@ export const RecipeDetails = () => {
                     <div className="border-bottom my-2 bg-secondary"></div>
 
                     <div className="row">
-                        {store.user?.user_id ?
-                            <div className="col-12 text-capitalize mt-1">
-                                <h6 className="mb-2">Allergens: </h6>
-                                <p>{store.recipe?.allergens.join(", ")}</p>
-                            </div>
-                            :
-                            ""}
+                        {store.user?.user_id ? 
+                        <div className="col-12 text-capitalize mt-1">
+                            <h6 className="mb-2">Allergens: </h6>
+                            <p>{store.recipe?.allergens.join(", ")}</p>
+                        </div>
+                        :
+                        ""}
                         <div className="col-12 d-flex">
                             <p className="ms-auto text_published align-self-end">Published on: {formattedDate}</p>
                         </div>

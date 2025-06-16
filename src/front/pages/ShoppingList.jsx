@@ -1,17 +1,13 @@
-import { Link } from "react-router-dom";
-import { TurnHome } from "../components/buttons/TurnHome";
-import { LinksMenu } from "../components/LinksMenu";
-import { RightMenu } from "../components/RightMenu";
-import { useState } from "react";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"
+import { LinksMenu } from "../components/LinksMenu"
+import { RightMenu } from "../components/RightMenu"
+import { useState } from "react"
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx"
 
 
 export const ShoppingList = () => {
 
-    const navigate = useNavigate(); 
-    
-    const {store, dispatch} = useGlobalReducer();
+     const {store, dispatch} =useGlobalReducer();
 
     const removeIngredient = (idx) => {
         dispatch({type:'remove_ingredient', payload: idx })
@@ -32,12 +28,9 @@ export const ShoppingList = () => {
 
                         <div className="container text-center sidebar-left-profile">
                             <div className="row align-items-start">
-                                <div className="col-12 col-md-3">
+                                <div className="col-3">
 
-                                    <div className="d-flex align-items-start">
-                                        <TurnHome />
                                         <LinksMenu />
-                                    </div>
 
                                 </div>
                                     
