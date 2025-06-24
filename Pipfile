@@ -90,13 +90,10 @@ yarl = "==1.20.1"
 your-app = "==0.1.0"
 flask = "*"
 flask-cors = "*"
-<<<<<<< HEAD
-"google.generativeai" = "*"
-=======
 sqlalchemy = "*"
 "sqlalchemy.orm" = "*"
 flask-jwt-extended = "*"
->>>>>>> 53c822fb17d55f793084e52779d48ec8f5068de7
+google-generativeai = "*"
 
 [requires]
 python_version = "3.13"
