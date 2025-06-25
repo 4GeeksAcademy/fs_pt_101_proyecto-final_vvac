@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { TurnHome } from "../components/buttons/TurnHome";
 import { LinksMenu } from "../components/LinksMenu";
 import { RightMenu } from "../components/RightMenu";
-import { CollectionCard } from "../components/CollectionCard"; // Ensure this path is correct
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import recipeServices from "../services/recetea_API/recipeServices.js";
 import collectionServices from "../services/recetea_API/collectionServices.js";
@@ -207,9 +205,26 @@ export const CollectionFav = () => {
                     <div className="row align-items-start">
                         <div className="col-3">
 
-                            <LinksMenu />
+                            {/* ——— TOGGLE (solo en xs y sm) ——— */}
+                                <button
+                                    className="btn btn-outline-secondary d-md-none mb-3"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#sidebarMenu"
+                                    aria-controls="sidebarMenu"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation"
+                                >
+                                    <i className="fa fa-bars"></i>
+                                </button>
 
-                        </div>
+                                {/* ——— SIDEBAR: colapsa en xs/sm, siempre abierto en md+ ——— */}
+                                <div className="collapse d-md-block" id="sidebarMenu">
+                                    <div className="d-flex flex-column flex-lg-row align-items-start gap-3 p-3">
+                                        <LinksMenu />
+                                    </div>
+                                </div>
+                            </div>
 
             <div className="col-12 col-md-6 main-column-content">
               <div className="d-flex align-items-start flex-column mb-3 edit-perfil">

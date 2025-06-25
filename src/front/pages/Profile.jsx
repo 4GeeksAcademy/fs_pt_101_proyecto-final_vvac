@@ -252,12 +252,6 @@ export const Profile = () => {
                                 {/* ——— SIDEBAR: colapsa en xs/sm, siempre abierto en md+ ——— */}
                                 <div className="collapse d-md-block" id="sidebarMenu">
                                     <div className="d-flex flex-column flex-lg-row align-items-start gap-3 p-3">
-                                        {/* TurnHome solo visible en pantallas lg+ */}
-                                        <div className="d-none d-lg-block">
-                                            <TurnHome />
-                                        </div>
-
-                                        {/* LinksMenu siempre visible */}
                                         <LinksMenu />
                                     </div>
                                 </div>

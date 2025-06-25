@@ -153,11 +153,26 @@ export const CreateRecipe = () => {
             <div className="rct-create-recipe-container container-fluid">
                 <div className="row g-0">
                     <div className="col-12 col-md-3 rct-left-sidebar">
-                        <div className="d-flex align-items-start rct-sidebar-content">
-                            <TurnHome />
-                            <LinksMenu />
-                        </div>
-                    </div>
+                        {/* ——— TOGGLE (solo en xs y sm) ——— */}
+                                <button
+                                    className="btn btn-outline-secondary d-md-none mb-3"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#sidebarMenu"
+                                    aria-controls="sidebarMenu"
+                                    aria-expanded="false"
+                                    aria-label="Toggle navigation"
+                                >
+                                    <i className="fa fa-bars"></i>
+                                </button>
+
+                                {/* ——— SIDEBAR: colapsa en xs/sm, siempre abierto en md+ ——— */}
+                                <div className="collapse d-md-block" id="sidebarMenu">
+                                    <div className="d-flex flex-column flex-lg-row align-items-start gap-3 p-3">
+                                        <LinksMenu />
+                                    </div>
+                                </div>
+                            </div>
 
                     <div className="col-12 col-md-9 rct-main-content">
                         <form className="rct-recipe-form-area d-flex flex-column mb-3" onSubmit={handleSubmit}>
