@@ -272,8 +272,6 @@ table {
   scroll-snap-type: x mandatory;
 }
 
-
-
 .details-btn {
   margin-top: 0.5rem;
   padding: 0.5rem;
@@ -284,7 +282,8 @@ table {
   cursor: pointer;
   width: 100%;
 }
-*/ .details-btn:hover {
+
+.details-btn:hover {
   background-color: #ca3e49;
   border-color: #000000;
   border-width: 1px;
@@ -850,7 +849,7 @@ table {
   background-color: #b47e58;
 }
 
-/* CSS vista meal planner (ALICE) */
+/* CSS vista meal planner */
 
 .planner-page {
   flex: 1;

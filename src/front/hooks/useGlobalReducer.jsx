@@ -20,7 +20,7 @@ export function StoreProvider({ children }) {
     const loadRecipes = async () => {
         try {
             const data = await recipeServices.getAllRecipes();
-            
+
             dispatch({ type: 'get_all_recipes', payload: data })
         } catch (error) {
             console.log(error);
@@ -38,30 +38,16 @@ export function StoreProvider({ children }) {
         }
     }
 
-    const loadUserRecipes = async () => {
-        try {
-            const data = await recipeServices.getAllUserRecipes();
-            dispatch({ type: 'get_user_recipes', payload: data });
-        } catch (error) {
-            console.error("Error fetching user recipes:", error.message || error);
-        }
-    }
-
     // Load the page once only
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-
-        if (token && user) {
-            dispatch({
-                type: "logIn",
-                payload: { token, user: JSON.parse(user) },
-            });
-            loadRecipes()
-            loadCollections()
-            loadUserRecipes()
+        if (store.user && store.token) {
+            loadRecipes();
+            loadCollections();
+        } else {
+            loadRecipes();
         }
-    }, [])
+    }, [store.user, store.token]);
+
 
     // Provide the store and dispatch method to all child components.
     return <StoreContext.Provider value={{ store, dispatch }}>

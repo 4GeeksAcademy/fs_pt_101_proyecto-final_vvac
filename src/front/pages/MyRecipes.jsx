@@ -79,12 +79,14 @@ export const MyRecipes = () => {
     // Load data from store to avoid slow the page
     useEffect(() => {
         //will load only the tab we open to make is less slow
-        if (activeTab === "your-recipes" && !loadedTabs["your-recipes"]) {
-            loadUserRecipes();
-        }
+        if (store.user?.is) {
+            if (activeTab === "your-recipes" && !loadedTabs["your-recipes"]) {
+                loadUserRecipes();
+            }
 
-        if (activeTab === "collections" && !loadedTabs.collections) {
-            loadUserCollections();
+            if (activeTab === "collections" && !loadedTabs.collections) {
+                loadUserCollections();
+            }
         }
 
     }, [activeTab, dispatch, loadedTabs]);

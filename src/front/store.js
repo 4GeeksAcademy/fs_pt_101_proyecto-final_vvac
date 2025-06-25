@@ -1,7 +1,7 @@
 export const initialStore = () => {
   return {
     token: localStorage.getItem("token") || null,
-    user: JSON.parse(localStorage.getItem("user") || "{}"),
+    user: JSON.parse(localStorage.getItem("user") && localStorage.getItem("user") !== "undefined" ? localStorage.getItem("user") : "{}"),
     recipes: [],
     recipe: null,
     collections: [],

@@ -80,3 +80,4 @@ WTForms==3.2.1
 xxhash==3.5.0
 yarl==1.20.1
 your-app==0.1.0
+gunicorn

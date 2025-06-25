@@ -41,12 +41,20 @@ export const RecipeScroller = () => {
             style={{ width: '250px', scrollSnapAlign: 'start', cursor: 'pointer' }}
             key={recipe.id}
           >
-            <HomeCard
-              key={recipe.id}
-              id={recipe.id}
-              url={recipe.media?.[0]?.url}
-              title={recipe.title}
-            />
+            {recipes.length === 0 ? (
+              <p>No recipes available yet.</p>
+            ) : (
+              recipes.map(recipe => (
+                <div key={recipe.id}>
+                  <HomeCard
+                    id={recipe.id}
+                    url={recipe.media?.[0]?.url}
+                    title={recipe.title}
+                  />
+                </div>
+              ))
+            )}
+
           </div>
         ))}
       </div>

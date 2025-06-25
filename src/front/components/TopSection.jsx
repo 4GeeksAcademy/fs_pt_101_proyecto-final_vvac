@@ -1,12 +1,12 @@
 import React from 'react';
-
+import alimentosTop from '../assets/img/alimentosTop.jpg'
 export const TopSection = () => {
     return (
         <div className="row m-0 justify-content-center row_home_top">
             <div className="col-12 position-relative p-4 top_home_img">
 
                 <img
-                    src="src/front/assets/img/alimentosTop.jpg"
+                    src={alimentosTop}
                     alt="Fondo"
                     className="w-100 h-100 object-fit-cover mx-auto p-4"
                 />

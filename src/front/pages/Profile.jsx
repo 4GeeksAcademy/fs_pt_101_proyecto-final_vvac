@@ -1,4 +1,3 @@
-import { TurnHome } from "../components/buttons/TurnHome";
 import { LinksMenu } from "../components/LinksMenu";
 
 import useGlobalReducer from "../hooks/useGlobalReducer";
@@ -347,6 +346,7 @@ export const Profile = () => {
                                         <button type="button" className="btn btn-secondary p-2 mt-2" data-bs-toggle="modal" data-bs-target="#modalDeleteAccount">Delete account</button>
                                     </div>
                                 </div>
+                        
                             </div>
                         </div>
                     </div>

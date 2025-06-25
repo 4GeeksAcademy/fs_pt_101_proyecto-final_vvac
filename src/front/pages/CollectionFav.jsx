@@ -195,17 +195,21 @@ export const CollectionFav = () => {
     );
   };
 
-  return (
-    <div className="main-row-all vh-100">
-      <div className="profile-container">
-        <div className="container text-center sidebar-left-profile">
-          <div className="row align-items-start">
-            <div className="col-12 col-md-3">
-              <div className="d-flex align-items-start">
-                <TurnHome />
-                <LinksMenu />
-              </div>
-            </div>
+    return (
+
+        <div className="main-row-all vh-100">
+
+            <div className="profile-container">
+
+                {/* COLUMNA LATERAL IZQ */}
+
+                <div className="container text-center sidebar-left-profile">
+                    <div className="row align-items-start">
+                        <div className="col-3">
+
+                            <LinksMenu />
+
+                        </div>
 
             <div className="col-12 col-md-6 main-column-content">
               <div className="d-flex align-items-start flex-column mb-3 edit-perfil">
