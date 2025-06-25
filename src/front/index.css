@@ -202,6 +202,7 @@ table {
 
 @media (max-width: 576px) {
   .top_intro_text {
+    position: static;
     width: 80%;
     aspect-ratio: auto; /* Evita desproporciones en móviles */
   }
@@ -385,6 +386,14 @@ table {
 /* Here starts the recipe card css */
 .user-recipe-card {
   width: 100%;
+  height: 250px;
+  background-color: #fafafa;
+}
+
+.row_bg_suggestions {
+  min-width: 25rem;
+  border-radius: 0.8rem;
+  border: 1px solid #c1454b;
   margin-bottom: 1rem;
   border-radius: 0.5rem;
   overflow: hidden;
@@ -441,6 +450,22 @@ table {
   border-radius: 50%;
   object-fit: cover;
   margin-right: 0.5rem;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.title_suggestion_card p {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .position-absolute.top-0.end-0 {

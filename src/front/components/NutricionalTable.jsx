@@ -44,10 +44,7 @@ export const NutricionalTable = () =>{
         protein: 0, 
         salt: 0, 
         sodium: 0 
-    };
-
-    console.log(store.recipe);
-    
+    };    
 
     return(
 

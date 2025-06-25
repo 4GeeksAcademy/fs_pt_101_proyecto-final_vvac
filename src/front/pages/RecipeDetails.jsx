@@ -76,7 +76,6 @@ export const RecipeDetails = () => {
 
 
     const stepsArray = splitSteps(store.recipe?.steps);
-    console.log(store.recipe?.diet_label);
 
     //will make random number so we can sort recipe and shows differents suggestions to user
     const getRandomItems = (array, count) => {
@@ -241,7 +240,7 @@ export const RecipeDetails = () => {
             </div>
 
             <div className="row">
-                <div className="col-12 col-md-6 mb-4">
+                <div className="col-12 col-md-8 col-lg-6 mb-4">
                     {store.user?.id ? <NutricionalTable /> : ""}
                 </div>
             </div>
@@ -249,7 +248,7 @@ export const RecipeDetails = () => {
             <Comments recipe_id={id} />
 
             <div className="row row_bg_suggestions">
-                <h2 className="p-4 text-light">Latest Recipes</h2>
+                <h2 className="p-4 text-light fs-1">Latest Recipes</h2>
                 <div className="col-12">
                     <div className="scroll-container d-flex p-3">
 

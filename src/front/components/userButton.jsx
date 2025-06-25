@@ -26,11 +26,11 @@ export const UserButton = () => {
                 />
             </button>
             <ul className="dropdown-menu dropdown-menu-end nav_drop">
-                <li><a className="dropdown-item" href="/profile">Profile</a></li>
-                <li><a className="dropdown-item" href="/your-collection">My Recipes</a></li>
-                <li><a className="dropdown-item" href="/meal-planner">Meal Planner</a></li>
+                <li><a className="dropdown-item fs-5" href="/profile">Profile</a></li>
+                <li><a className="dropdown-item fs-5" href="/your-collection">My Recipes</a></li>
+                <li><a className="dropdown-item fs-5" href="/meal-planner">Meal Planner</a></li>
                 <li><hr className="dropdown-divider" /></li>
-                <li><LogOut /></li>
+                <li className="dropdown-item fs-5"><LogOut /></li>
             </ul>
         </div>
 

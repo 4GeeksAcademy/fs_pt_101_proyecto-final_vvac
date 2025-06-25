@@ -8,7 +8,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import recipeServices from "../services/recetea_API/recipeServices.js";
 
 // componentes
-import { RecipeCard } from "./RecipeCard.jsx";
+import { HomeCard } from "./HomeCard.jsx";
 
 export const RecipeScroller = () => {
   const [recipes, setRecipes] = useState([]);
@@ -41,7 +41,7 @@ export const RecipeScroller = () => {
             style={{ width: '250px', scrollSnapAlign: 'start', cursor: 'pointer' }}
             key={recipe.id}
           >
-            <RecipeCard
+            <HomeCard
               key={recipe.id}
               id={recipe.id}
               url={recipe.media?.[0]?.url}

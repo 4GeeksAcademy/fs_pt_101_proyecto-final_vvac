@@ -74,7 +74,7 @@ export const CollectionList = () => {
                 {store.collections && store.collections.length > 0 ? (
                     store.collections.map((el) => (
                         <li key={el.recipe_id} className="d-flex">
-                            <button className="dropdown-item m-1 collection_btn_list text-capitalize" 
+                            <button className="dropdown-item m-1 collection_btn_list text-capitalize fs-5" 
                             type="button"
                             onClick={() => navigate("/recipes/" + el.recipe_id)}>
                                 {el.recipe_title}

@@ -157,7 +157,7 @@ export const Comments = (props) => {
 
                         :
                         // Will return a phrase if empty
-                        (<h5 className="m-4">Be the first to comment on this recipe!</h5>)
+                        (<h5 className="m-4 fs-4">Be the first to comment on this recipe!</h5>)
                     }
                 </div>
 

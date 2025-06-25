@@ -48,7 +48,7 @@ COMMON_INGREDIENT_ALLERGENS = {
     "pasta": ["wheat", "gluten"],
     "bread": ["wheat", "gluten"],
     "flour": ["wheat", "gluten"],
-    "milk": ["milk"],
+    "milk": ["milk", "lactose"],
     "cheese": ["milk", "lactose"],
     "butter": ["milk", "lactose"],
     "yogurt": ["milk", "lactose"],
@@ -84,6 +84,7 @@ COMMON_INGREDIENT_ALLERGENS = {
     "wine": ["sulfites"]
 }
 
+
 def convert_to_grams(ingredient_name: str, unit: str, quantity: float) -> float:
     name = ingredient_name.lower()
     unit = unit.lower()
@@ -97,12 +98,14 @@ def convert_to_grams(ingredient_name: str, unit: str, quantity: float) -> float:
     # Unknown unit fallback
     return 0
 
+
 def get_common_allergens_fuzzy(name):
     name = name.lower()
     for key in COMMON_INGREDIENT_ALLERGENS:
         if key in name:
             return COMMON_INGREDIENT_ALLERGENS[key]
     return []
+
 
 def get_ingredient_info(name):
     normalized_name = name.lower().strip()
@@ -124,22 +127,42 @@ def get_ingredient_info(name):
         data = response.json()
         products = data.get("products", [])
 
+        required_keys = [
+            "energy-kcal_100g", "carbohydrates_100g", "proteins_100g",
+            "sugars_100g", "fiber_100g"
+        ]
+
         selected_nutriments = {}
         selected_allergens_tags = []
+
+        # Para fallback: guardar el producto con más nutrientes válidos encontrados
+        best_nutriments = {}
+        best_count = -1
 
         for p in products:
             product_name = p.get("product_name", "").lower().strip()
             nutriments = p.get("nutriments", {})
 
-            if not selected_nutriments and any(
-                nutriments.get(key) not in [None, "", 0]
-                for key in ["energy-kcal_100g", "carbohydrates_100g", "proteins_100g"]
-            ):
+            # Contar cuántos nutrientes requeridos tiene con valor válido
+            count_valid = sum(
+                1 for key in required_keys if nutriments.get(key) not in [None, "", 0]
+            )
+
+            # Selección prioritaria: tiene todos los requeridos?
+            if not selected_nutriments and count_valid == len(required_keys):
                 selected_nutriments = nutriments
+
+            # Para fallback: si no hay seleccionado con todos, actualizar el mejor según count_valid
+            if count_valid > best_count:
+                best_count = count_valid
+                best_nutriments = nutriments
 
             if product_name == normalized_name:
                 selected_allergens_tags = p.get("allergens_tags", [])
                 break
+
+        if not selected_nutriments:
+            selected_nutriments = best_nutriments
 
         api_allergens = [
             a.replace("en:", "").replace("fr:", "").strip()
@@ -174,29 +197,38 @@ def get_ingredient_info(name):
             "allergens": fallback_allergens
         }
 
+
 def calculate_calories(grams, calories_per_100g):
     return (grams * calories_per_100g) / 100
+
 
 def calculate_fat(grams, fat_per_100g):
     return (grams * fat_per_100g) / 100
 
+
 def calculate_carbs(grams, carbs_per_100g):
     return (grams * carbs_per_100g) / 100
+
 
 def calculate_protein(grams, protein_per_100g):
     return (grams * protein_per_100g) / 100
 
+
 def calculate_salt(grams, salt_per_100g):
     return (grams * salt_per_100g) / 100
+
 
 def calculate_sodium(grams, sodium_per_100g):
     return (grams * sodium_per_100g) / 100
 
+
 def calculate_sugars(grams, sugars_per_100g):
     return (grams * sugars_per_100g) / 100
 
+
 def calculate_fiber(grams, fiber_per_100g):
     return (grams * fiber_per_100g) / 100
+
 
 def calculate_total_nutrition(ingredients):
     totals = {

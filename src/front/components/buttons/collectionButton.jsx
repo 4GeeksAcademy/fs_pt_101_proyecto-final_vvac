@@ -49,8 +49,6 @@ export const CollectionButton = (props) =>{
                 //update store.collections
                 dispatch({ type: 'update_collections', payload: newList });
 
-                console.log("Recipe was added to collection");
-
             } else {
                 console.error("Error from service:", data.error);
             }
@@ -84,8 +82,6 @@ export const CollectionButton = (props) =>{
     };
 
     const isAdded = Array.isArray(store.collections) && store.collections.some(item => item.recipe_id === Number(props.recipe_id));
-
-    console.log(isAdded);
     
     //will reload only if user logs in or out from account
     useEffect(() => {
