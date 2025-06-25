@@ -1,55 +1,85 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";              
 
-//hooks
+// hooks
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
-//services
-import recipeServices from "../services/recetea_API/recipeServices.js"
+// services
+import recipeServices from "../services/recetea_API/recipeServices.js";
 
 export const UserRecipeCard = (props) => {
-
     const { store, dispatch } = useGlobalReducer();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    // ← fallback URL y estado para el avatar
+    const fallbackAvatarUrl = "https://cdn.pixabay.com/photo/2017/08/08/14/26/chef-2611516_1280.jpg";
+    const [avatarSrc, setAvatarSrc] = useState(props.authorAvatar || fallbackAvatarUrl);
+
+    // ← sincronizar estado si cambia props.authorAvatar
+    useEffect(() => {
+        setAvatarSrc(props.authorAvatar || fallbackAvatarUrl);
+    }, [props.authorAvatar]);
 
     const name = props.name || props.title;
     const url = props.url || props.imageUrl;
 
     // Fetch of the comments by recipe_id
-    const getOneUserRecipe = async () => recipeServices.getOneUserRecipe(props.recipe_id).then(data => {
-        dispatch({ type: 'get_user_recipe', payload: data });
-    })
+    const getOneUserRecipe = async () =>
+        recipeServices.getOneUserRecipe(props.recipe_id).then((data) => {
+            dispatch({ type: "get_user_recipe", payload: data });
+        });
 
-    const handleClick = (e) => {
+    const handleClick = () => {
         navigate("/recipes/" + props.id);
         getOneUserRecipe();
     };
 
     return (
-        <div className="m-2 recipes_cards_bg border">
-            <div className="card row_bg_suggestions text-white p-0 border-0 position-relative h-100">
-                <img
-                    src={url}
-                    className="img-fluid card-img recipes_card_user border-0"
-                    alt="recipe_img"
-                />
+        <div className="user-recipe-card mb-3 w-100 border rounded overflow-hidden">
+            {/* Card container redesigned to full width */}
+            <div className="d-flex flex-row bg-white">
+                {/* Left: Image section */}
+                <div className="card-img-container flex-shrink-0">
+                    <img src={url} alt="recipe_img" className="card-image-collection" />
+                </div>
 
-                <div className="card-img-overlay d-flex flex-column justify-content-between p-2 p-sm-3 overflow-auto">
-                    {/* Botones arriba derecha */}
-                    <div className="d-flex justify-content-end position-absolute top-0 end-0 m-1 m-sm-2 z-2">
-                        {props.children}
+                {/* Right: Info section */}
+                <div className="card-info flex-grow-1 p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        {/* Title and subtitle */}
+                        <h5 className="card-title mb-1" onClick={handleClick}>
+                            {name}
+                        </h5>
+                        <p className="card-subtitle text-muted mb-2">
+                            {props.subtitle /* e.g. 'listado ingredientes' */}
+                        </p>
                     </div>
 
-                    {/* Título + Fecha abajo */}
-                    <div
-                        className="text-center bg-dark bg-opacity-75 rounded p-1 p-sm-2 mt-auto"
-                        onClick={handleClick}
-                    >
-                        <p className="card-title text-light fs-6 fs-sm-5 mb-1 lh-1">{name}</p>
-                        <small className="text-light">{props.published}</small>
+                    <div className="d-flex align-items-center justify-content-between">
+                        {/* Author info with URL fallback logic */}
+                        <div className="d-flex align-items-center">
+                            <img
+                                src={avatarSrc}
+                                alt="author"
+                                className="rounded-circle author-avatar me-2"
+                                onError={() => {
+                                    // if avatar URL fails, set fallback
+                                    setAvatarSrc(fallbackAvatarUrl);
+                                }}
+                            />
+                            <small className="text-secondary">{props.authorName}</small>
+                        </div>
+
+                        {/* Published date */}
+                        <small className="text-secondary">Guardada el {props.published}</small>
                     </div>
+                </div>
+
+                {/* Top-right actions */}
+                <div className="position-absolute top-0 end-0 m-2 z-2">
+                    {props.children}
                 </div>
             </div>
         </div>
-
     );
 };
