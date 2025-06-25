@@ -8,7 +8,7 @@ import { MealPlannerCalendar } from "../components/MealPlannerCalendar";
 export const MealPlanner = () => {
   return (
     <div className="container-fluid">
-      <div className="row flex-nowrap min-vh-100">
+      <div className="row flex-nowrap">
         {/* Left Sidebar (same as SearchPage) */}
         <div className="col-12 col-sm-3 col-md-2 p-2 d-flex flex-column">
           <LinksMenu />

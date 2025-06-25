@@ -231,7 +231,7 @@ export const Profile = () => {
 
     return (
         <>
-            <div className="main-row-all vh-100">
+            <div className="main-row-all">
                 <div className="profile-container">
                     <div className="container text-center sidebar-left-profile">
                         <div className="row align-items-stretch g-0">
