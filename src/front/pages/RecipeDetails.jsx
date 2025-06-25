@@ -11,7 +11,6 @@ import recipeServices from "../services/recetea_API/recipeServices.js"
 import { Comments } from "../components/Comments.jsx";
 import { NutricionalTable } from "../components/NutricionalTable.jsx";
 import { RecipeCard } from "../components/RecipeCard.jsx";
-import { UserRecipeCard } from "../components/UserRecipeCard.jsx";
 
 //buttons
 import { LikeButton } from '../components/buttons/likeButton.jsx';
@@ -23,7 +22,7 @@ import { AddIngredientsToListButton } from "../components/buttons/AddIngredients
 
 //icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartPlus, faCalendarDays, faUtensils, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUtensils, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 
 export const RecipeDetails = () => {

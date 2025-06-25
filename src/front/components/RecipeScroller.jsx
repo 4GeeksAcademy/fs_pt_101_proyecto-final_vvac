@@ -15,6 +15,12 @@ export const RecipeScroller = () => {
   const navigate = useNavigate();
   const { store, dispatch } = useGlobalReducer();
 
+  //will make random number so we can sort recipe and shows differents suggestions to user
+  const getRandomItems = (array, count) => {
+    if (!Array.isArray(array)) return [];
+    return [...array].sort(() => 0.5 - Math.random()).slice(0, count);
+  };
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -29,32 +35,22 @@ export const RecipeScroller = () => {
   }, []);
 
   return (
-    <div className="card_row_scroll bg-light ">
-      <h2 className="title_Recipe_Scroller text-center fw-bold mb-0 text-dark">Some random recipes!!</h2>
-      <div
-        className="d-flex overflow-auto gap-5 pb-2 pt-2 scrollbar-custom"
-        style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
-      >
-        <div
-          className="m-0 scroll_cards_bg border flex-shrink-0"
-          style={{ width: '250px', scrollSnapAlign: 'start', cursor: 'pointer' }}
-        >
-          {recipes.length === 0 ? (
-            <p>No recipes available yet.</p>
-          ) : (
-            recipes.map(recipe => (
-              <div key={recipe.id}>
-                <HomeCard
-                  id={recipe.id}
-                  url={recipe.media?.[0]?.url}
-                  title={recipe.title}
-                />
-              </div>
-            ))
-          )}
+    <div className="bg-light">
+      <h2 className="title_Recipe_Scroller text-center fw-bold mb-0 text-dark">
+        Some random recipes!!
+      </h2>
 
-        </div>
+      <div className="scroll-container d-flex p-3">
+        {getRandomItems(store.recipes, 10).map((el) => (
+          <HomeCard
+            key={el.id}
+            id={el.id}
+            url={el.media?.[0]?.url}
+            title={el.title}
+          />
+        ))}
       </div>
     </div>
+
   );
 };

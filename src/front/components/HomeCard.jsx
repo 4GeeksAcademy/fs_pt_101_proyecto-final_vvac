@@ -24,7 +24,7 @@ export const HomeCard = (props) => {
     const url = props.url || props.imageUrl;
 
     return (
-        <div className="m-2 scroll_cards_bg border" onClick={handleClick}>
+        <div className="m-2 scroll_cards_bg border border-danger border-2" onClick={handleClick}>
             <div className="card bg-light text-white p-3 border-0 position-relative overflow-hidden">
                 <img src={url} className="img-fluid card-img recipes_card_img border-0" alt="recipe_img" />
                 <div className="card-img-overlay p-0 d-flex align-items-end">

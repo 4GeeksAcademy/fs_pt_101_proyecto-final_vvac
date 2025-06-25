@@ -27,9 +27,10 @@ export const Profile = () => {
         const mergedData = { ...formData, ...updatedFields };
 
         // Remove password if empty or only spaces
-        if (!mergedData.password || mergedData.password.trim() === "") {
+        if ((mergedData.password ?? "").trim() === "") {
             delete mergedData.password;
         }
+
 
         try {
             console.log("Submitting merged formData:", mergedData);
@@ -156,11 +157,10 @@ export const Profile = () => {
             delete dataToSubmit.password;
         }
 
-        if (!dataToSubmit.email || dataToSubmit.password.trim() === "") {
+        if (!dataToSubmit.email) {
             delete dataToSubmit.email;
         }
-
-        if (!dataToSubmit.username || dataToSubmit.password.trim() === "") {
+        if (!dataToSubmit.username) {
             delete dataToSubmit.username;
         }
 
@@ -252,19 +252,13 @@ export const Profile = () => {
                                 {/* ——— SIDEBAR: colapsa en xs/sm, siempre abierto en md+ ——— */}
                                 <div className="collapse d-md-block" id="sidebarMenu">
                                     <div className="d-flex flex-column flex-lg-row align-items-start gap-3 p-3">
-                                        {/* TurnHome solo visible en pantallas lg+ */}
-                                        <div className="d-none d-lg-block">
-                                            <TurnHome />
-                                        </div>
+
 
                                         {/* LinksMenu siempre visible */}
                                         <LinksMenu />
                                     </div>
                                 </div>
                             </div>
-
-
-
 
                             {/* COLUMNA PRINCIPAL */}
                             <div className="col-6 main-column-content">
@@ -346,7 +340,7 @@ export const Profile = () => {
                                         <button type="button" className="btn btn-secondary p-2 mt-2" data-bs-toggle="modal" data-bs-target="#modalDeleteAccount">Delete account</button>
                                     </div>
                                 </div>
-                        
+
                             </div>
                         </div>
                     </div>

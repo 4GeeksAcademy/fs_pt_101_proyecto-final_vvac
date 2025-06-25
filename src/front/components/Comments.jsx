@@ -43,7 +43,7 @@ export const Comments = (props) => {
 
         const data = await commentServices.createComment(props.recipe_id, comment.content)
         await getAllComments();
-
+        
         //is we can POST the comment
         if (data.success) {
 
